@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  sql.data:
+    container_name: identitySQL
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    ports:
+      - "15433:1433" # Important: In a production environment your should remove the external port
