@@ -1,11 +1,23 @@
 version: "3.7"
 
 services:
-  sql.data:
-    container_name: identitySQL
+  sql.database:
+    container_name: sql.database
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
       - SA_PASSWORD=Pass@word
       - ACCEPT_EULA=Y
     ports:
       - "15433:1433" # Important: In a production environment your should remove the external port
+    volumes:
+      - sql.database.volume:/var/lib/mysql
+  # identity.app:
+  #   container_name: identity.app
+
+volumes:
+  sql.database.volume:
+
+networks:
+  default:
+    name: identity_network
+    driver: bridge
