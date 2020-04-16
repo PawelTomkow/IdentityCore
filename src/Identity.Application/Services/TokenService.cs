@@ -42,7 +42,7 @@ namespace Identity.Application.Services
         {
             var now = DateTime.UtcNow;
             var userClaims = GetNamesUserRoles(await _userService.GetUserRoleAsync(tokenCommand.UserId));
-            var userRoles = userClaims as string[] ?? userClaims.ToArray();
+            var userRoles = userClaims as string[] ?? userClaims?.ToArray();
             var claims = PrepareClaims(tokenCommand.UserId, now, userRoles);
             var expires = GetExperienceTime(now);
 
@@ -101,14 +101,15 @@ namespace Identity.Application.Services
                 new Claim(JwtRegisteredClaimNames.Iat, nowTime.ToTimestamp().ToString(), ClaimValueTypes.Integer64)
             };
 
-            claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+            if(userRoles != null)
+                claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             return claims.ToArray();
         }
 
         private static IEnumerable<string> GetNamesUserRoles(IEnumerable<Role> roles)
         {
-            return roles.Select(role => role.Name);
+            return roles?.Select(role => role.Name);
         }
 
         private DateTime GetExperienceTime(DateTime now)

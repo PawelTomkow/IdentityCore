@@ -69,7 +69,7 @@ namespace Identity.Application.Repository
         public async Task<IEnumerable<Role>> GetUserRoleAsync(int tokenCommandUserId)
         {
             var result = await _context.Users.Where(usr => usr.Id == tokenCommandUserId).FirstOrDefaultAsync();
-            return result.Roles.ToArray();
+            return result.Roles?.ToArray();
         }
     }
 }
