@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Identity.Application.Commands;
+using Identity.Application.Services.Interfaces;
 using Identity.Extensions;
-using Identity.Infrastructure.Commands;
-using Identity.Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Controllers

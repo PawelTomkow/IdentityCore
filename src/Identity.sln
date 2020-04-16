@@ -9,11 +9,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.EndToEnd", "Identi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Core", "Identity.Core\Identity.Core.csproj", "{DBE7AAA2-3988-4965-BB90-0F26815812B4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Infrastructure", "Identity.Infrastructure\Identity.Infrastructure.csproj", "{8A7B9A2B-E1DD-4CAD-A2E0-EF6077100F54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Application", "Identity.Application\Identity.Application.csproj", "{8A7B9A2B-E1DD-4CAD-A2E0-EF6077100F54}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Persistence", "Identity.Persistence\Identity.Persistence.csproj", "{0A5413B8-73B0-44AB-9DB6-082948DD0701}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Tests", "Identity.Tests\Identity.Tests.csproj", "{2D9D5540-D5CA-420E-9582-F211C0E11F1A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{CC14384E-00F2-43F0-ABBE-8D4D9B646F93}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{4E6CBD14-5509-4302-9DC6-B8E79C36B041}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{63CA009D-C2C3-485D-BC39-9C5AC8CCE57C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{34878823-0321-4F07-9CF5-22E52B2BDCCE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,5 +59,13 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {586F4F2D-015A-4EFB-82A7-9F59D363325F}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8A7B9A2B-E1DD-4CAD-A2E0-EF6077100F54} = {CC14384E-00F2-43F0-ABBE-8D4D9B646F93}
+		{DBE7AAA2-3988-4965-BB90-0F26815812B4} = {CC14384E-00F2-43F0-ABBE-8D4D9B646F93}
+		{DB390688-9CEB-4E8F-A0DF-52AB444432AB} = {4E6CBD14-5509-4302-9DC6-B8E79C36B041}
+		{0A5413B8-73B0-44AB-9DB6-082948DD0701} = {63CA009D-C2C3-485D-BC39-9C5AC8CCE57C}
+		{2D9D5540-D5CA-420E-9582-F211C0E11F1A} = {34878823-0321-4F07-9CF5-22E52B2BDCCE}
+		{4D19EB0C-11B7-48CA-BC6D-858E55120ED4} = {34878823-0321-4F07-9CF5-22E52B2BDCCE}
 	EndGlobalSection
 EndGlobal

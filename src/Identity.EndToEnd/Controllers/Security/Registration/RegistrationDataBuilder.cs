@@ -1,6 +1,6 @@
 using System.Net.Http;
+using Identity.Application.Commands;
 using Identity.EndToEnd.Controllers.Extentions;
-using Identity.Infrastructure.Commands;
 
 namespace Identity.EndToEnd.Controllers.Security.Registration
 {

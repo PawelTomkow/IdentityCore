@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Identity.Application.Exceptions;
 using Identity.Core.Exceptions;
-using Identity.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 

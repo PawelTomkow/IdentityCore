@@ -1,9 +1,10 @@
+using Identity.Application.Repository;
+using Identity.Application.Services;
+using Identity.Application.Services.Interfaces;
+using Identity.Application.Settings;
+using Identity.Core.Models;
 using Identity.Core.Repository;
 using Identity.Extensions;
-using Identity.Infrastructure.Repository;
-using Identity.Infrastructure.Services;
-using Identity.Infrastructure.Services.Interfaces;
-using Identity.Infrastructure.Settings;
 using Identity.Persistence.Cache;
 using Identity.Persistence.Context;
 using Identity.Persistence.Settings;
@@ -140,7 +141,7 @@ namespace Identity
         {
             services.AddSingleton<ICache, MemoryCache>();
             services
-                .AddSingleton<IPasswordHasher<Core.Domain.User>, PasswordHasher<Core.Domain.User>>();
+                .AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
         }
 
         private void RegisterIdentity(IServiceCollection services)

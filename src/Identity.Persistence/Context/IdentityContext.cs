@@ -1,4 +1,4 @@
-﻿using Identity.Core.Domain;
+﻿using Identity.Core.Models;
 using Identity.Persistence.TableConfiguration;
 using Microsoft.EntityFrameworkCore;
 

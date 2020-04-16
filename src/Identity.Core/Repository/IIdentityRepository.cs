@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Identity.Core.Domain;
+using Identity.Core.Models;
 
 namespace Identity.Core.Repository
 {
