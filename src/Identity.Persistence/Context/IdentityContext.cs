@@ -17,8 +17,8 @@ namespace Identity.Persistence.Context
             modelBuilder
                 .ApplyConfiguration(new UserConfiguration())
                 .ApplyConfiguration(new RoleConfiguration())
-                .ApplyConfiguration(new TokenConfiguration())
-                .ApplyConfiguration(new UserRoleConfiguration());
+                .ApplyConfiguration(new TokenConfiguration());
+            // .ApplyConfiguration(new UserRoleConfiguration());
         }
     }
 }

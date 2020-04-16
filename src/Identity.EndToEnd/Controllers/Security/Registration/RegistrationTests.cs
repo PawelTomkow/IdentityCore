@@ -7,7 +7,7 @@ namespace Identity.EndToEnd.Controllers.Security.Registration
 {
     public class RegistrationTests : ControllerTestsBase
     {
-        private const string Endpoint = "security/registration";
+        private const string Endpoint = "security/Register";
 
         [Fact]
         public async Task given_correct_LoginMailPassword_to_registration_should_200()

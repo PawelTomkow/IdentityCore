@@ -5,17 +5,28 @@ services:
     container_name: sql.database
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
-      - SA_PASSWORD=Pass@word
-      - ACCEPT_EULA=Y
+      - "SA_PASSWORD=Pass@word"
+      - "ACCEPT_EULA=Y"
     ports:
-      - "15433:1433" # Important: In a production environment your should remove the external port
+      - "16433:1433" # Important: In a production environment your should remove the external port
     volumes:
-      - sql.database.volume:/var/lib/mysql
+      - ./db:/var/opt/mssql/data
   # identity.app:
-  #   container_name: identity.app
-
-volumes:
-  sql.database.volume:
+  #   image: ${DOCKER_REGISTRY-}identity
+  #   build:
+  #     context: ..\src\
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - sql.database
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=https://+:5001;http://+:81
+  #   ports:
+  #     - "82": "81"
+  #     - "5001": "5001"
+  #   volumes:
+  #     - ./UserSecrets:/root/.microsoft/usersecrets:ro
+  #     - ./Https:/root/.aspnet/https:ro
 
 networks:
   default:

@@ -106,7 +106,7 @@ namespace Identity.Infrastructure.Services
             return claims.ToArray();
         }
 
-        private IEnumerable<string> GetNamesUserRoles(IEnumerable<Role> roles)
+        private static IEnumerable<string> GetNamesUserRoles(IEnumerable<Role> roles)
         {
             return roles.Select(role => role.Name);
         }

@@ -16,3 +16,4 @@ cd /D %tests_end_to_end%
 dotnet test
 
 cd /D ../../
+pause

@@ -9,6 +9,7 @@ namespace Identity.Persistence.TableConfiguration
         public void Configure(EntityTypeBuilder<Token> builder)
         {
             builder
+                .HasNoKey()
                 .HasOne(key => key.User)
                 .WithOne()
                 .HasForeignKey<Token>(fk => fk.UserId);

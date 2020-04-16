@@ -1,4 +1,5 @@
 using Identity.Core.Repository;
+using Identity.Extensions;
 using Identity.Infrastructure.Repository;
 using Identity.Infrastructure.Services;
 using Identity.Infrastructure.Services.Interfaces;
@@ -21,15 +22,17 @@ namespace Identity
 {
     public class Startup
     {
-        private static string _projectName = "";
+        private readonly string _projectName;
+        private readonly string _persistenceProjectName;
+        public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             _projectName = Configuration.GetSection("Project").GetValue<string>("Name");
+            _persistenceProjectName = Configuration.GetSection("Subprojects").GetValue<string>("Persistence");
         }
 
-        public IConfiguration Configuration { get; }
 
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -53,13 +56,14 @@ namespace Identity
                 app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "HomeBackend"); });
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
+            app.
+                UseHttpsRedirection()
+                .UseRouting()
+                .UseCustomExceptionHandler();
 
             // app.UseAuthorization();
-            app.UseCors("AllowAll");
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseCors("AllowAll")
+                .UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
         private static void ConfigureControllers(IServiceCollection services)
@@ -90,7 +94,7 @@ namespace Identity
         private void RegisterContext(IServiceCollection services)
         {
             services.AddDbContext<IdentityContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("Identity"), x
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityDatabase"), x
                     => x.MigrationsAssembly(_projectName)));
         }
 
@@ -132,14 +136,14 @@ namespace Identity
             RegisterPersistence(services);
         }
 
-        private static void RegisterPersistence(IServiceCollection services)
+        private void RegisterPersistence(IServiceCollection services)
         {
             services.AddSingleton<ICache, MemoryCache>();
             services
                 .AddSingleton<IPasswordHasher<Core.Domain.User>, PasswordHasher<Core.Domain.User>>();
         }
 
-        private static void RegisterIdentity(IServiceCollection services)
+        private void RegisterIdentity(IServiceCollection services)
         {
             services.AddTransient<IEncrypter, Encrypter>();
             services.AddTransient<IIdentityRepository, IdentityRepository>();

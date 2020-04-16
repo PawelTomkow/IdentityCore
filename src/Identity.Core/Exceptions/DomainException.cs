@@ -1,12 +1,24 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Identity.Core.Exceptions
 {
     public class DomainException : Exception
     {
-        public DomainException(string invalidUsername, string usernameIsInvalid)
+        public DomainException()
         {
-            throw new NotImplementedException();
+        }
+
+        protected DomainException(SerializationInfo? info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        public DomainException(string? message) : base(message)
+        {
+        }
+
+        public DomainException(string? message, Exception? innerException) : base(message, innerException)
+        {
         }
     }
 }

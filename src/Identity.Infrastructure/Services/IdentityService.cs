@@ -29,21 +29,26 @@ namespace Identity.Infrastructure.Services
             if (user == null) throw new IdentityExceptions(ErrorCodes.InvalidCredentials, "Invalid credentials");
 
             var hash = _encrypter.GetHash(loginCommand.Password, user.Salt);
-            if (user.Password == hash)
+            if (user.Password != hash)
+                throw new IdentityExceptions(ErrorCodes.InvalidCredentials, "Invalid credentials");
+            await _tokenService.GenerateTokenAsync(new GetTokenCommand
             {
-                await _tokenService.GenerateTokenAsync(new GetTokenCommand
-                {
-                    UserId = user.Id
-                });
-                return;
-            }
-
-            throw new IdentityExceptions(ErrorCodes.InvalidCredentials, "Invalid credentials");
+                UserId = user.Id
+            });
         }
 
-        public Task RegisterAsync(RegisterCommand registerCommand)
+        public async Task RegisterAsync(RegisterCommand registerCommand)
         {
-            throw new NotImplementedException();
+            var user = await _identityRepository.GetAsync(registerCommand.Email);
+            if(user != null)
+            {
+                throw new IdentityExceptions($"User with email: '{registerCommand.Email}' already exists.");
+            }
+
+            var salt = _encrypter.GetSalt(registerCommand.Password);
+            var hash = _encrypter.GetHash(registerCommand.Password, salt);
+            user = new User(registerCommand.Email,  registerCommand.Username, hash, salt);
+            await _identityRepository.AddAsync(user);
         }
     }
 }

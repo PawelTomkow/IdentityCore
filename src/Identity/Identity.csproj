@@ -5,9 +5,14 @@
         <AssemblyName>Identity</AssemblyName>
         <RootNamespace>Identity</RootNamespace>
         <Nullable>enable</Nullable>
+        <UserSecretsId>64f6fc12-8fc4-4637-a6b5-2dbf38222567</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+        <IsServiceFabricServiceProject>True</IsServiceFabricServiceProject>
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.1" />
     </ItemGroup>
