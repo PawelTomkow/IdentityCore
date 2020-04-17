@@ -1,3 +1,4 @@
+using AutoMapper;
 using Identity.Application.Repository;
 using Identity.Application.Services;
 using Identity.Application.Services.Interfaces;
@@ -33,9 +34,7 @@ namespace Identity
             _projectName = Configuration.GetSection("Project").GetValue<string>("Name");
             _persistenceProjectName = Configuration.GetSection("Subprojects").GetValue<string>("Persistence");
         }
-
-
-
+        
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -123,16 +122,10 @@ namespace Identity
                 Configuration.GetSection(nameof(SecuritySettings)));
         }
 
-
-        public void RegisterShared(IServiceCollection services)
-        {
-        }
-
         private void RegisterServices(IServiceCollection services)
         {
             services.AddMemoryCache();
-
-            RegisterShared(services);
+            
             RegisterIdentity(services);
             RegisterPersistence(services);
         }
@@ -146,10 +139,10 @@ namespace Identity
 
         private void RegisterIdentity(IServiceCollection services)
         {
-            services.AddTransient<IEncrypter, Encrypter>();
-            services.AddTransient<IIdentityRepository, IdentityRepository>();
-            services.AddTransient<ITokenService, TokenService>();
-            services.AddTransient<IIdentityService, IdentityService>();
+            services
+                .AddAutoMapper()
+                .AddIdentityRepositories()
+                .AddIdentityServices();
         }
         
     }

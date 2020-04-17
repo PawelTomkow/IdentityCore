@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Identity.Application.Commands;
 using Identity.Application.DTOs;
 using Identity.Application.Extensions;
@@ -23,25 +24,31 @@ namespace Identity.Application.Services
     public class TokenService : ITokenService
     {
         private readonly ICache _cache;
+        private readonly IMapper _mapper;
         private readonly SecuritySettings _securitySettings;
         private readonly IPasswordHasher<User> _passwordHasher;
-        private readonly IIdentityRepository _userService;
+        private readonly IIdentityRepository _identityRepository;
+        private readonly ITokenRepository _tokenRepository;
 
-        public TokenService(IIdentityRepository userService,
+        public TokenService(IIdentityRepository identityRepository,
+            ITokenRepository tokenRepository,
             SecuritySettings securitySettings,
             IPasswordHasher<User> passwordHasher,
-            ICache cache)
+            ICache cache,
+            IMapper mapper)
         {
-            _userService = userService;
+            _identityRepository = identityRepository;
+            _tokenRepository = tokenRepository;
             _securitySettings = securitySettings;
             _passwordHasher = passwordHasher;
             _cache = cache;
+            _mapper = mapper;
         }
 
         public async Task GenerateTokenAsync(GetTokenCommand tokenCommand)
         {
             var now = DateTime.UtcNow;
-            var userClaims = GetNamesUserRoles(await _userService.GetUserRoleAsync(tokenCommand.UserId));
+            var userClaims = GetNamesUserRoles(await _identityRepository.GetUserRoleAsync(tokenCommand.UserId));
             var userRoles = userClaims as string[] ?? userClaims?.ToArray();
             var claims = PrepareClaims(tokenCommand.UserId, now, userRoles);
             var expires = GetExperienceTime(now);
@@ -49,8 +56,7 @@ namespace Identity.Application.Services
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_securitySettings.Key)),
                 SecurityAlgorithms.HmacSha256);
-
-
+            
             var jwt = new JwtSecurityToken(
                 _securitySettings.Issuer,
                 claims: claims,
@@ -61,36 +67,52 @@ namespace Identity.Application.Services
 
             var token = new JwtSecurityTokenHandler().WriteToken(jwt);
             var refreshToken = await GenerateRefreshTokenAsync(tokenCommand.UserId);
-            var jsonToken = ParsingTokenToJson(tokenCommand, token, expires, refreshToken, userRoles);
+            var objToken = ParsingTokenToDto(tokenCommand, token, expires, refreshToken, userRoles);
+            var jsonToken = ParsingTokenToJson(objToken);
 
+            var tokenDatabaseModel = _mapper.Map<Token>(objToken);
+
+            await _tokenRepository.AddAsync(tokenDatabaseModel);
             _cache.Add(GenerateCacheObject(tokenCommand.IdRequest, jsonToken));
         }
 
         public async Task RefreshTokenAsync(RefreshTokenCommand refreshTokenCommand)
         {
-            throw new NotImplementedException();
+            var userId = await _tokenRepository.GetUserIdAsync(refreshTokenCommand.RefreshToken);
+            var tokenCommand = new GetTokenCommand()
+            {
+                IdRequest = refreshTokenCommand.IdRequest,
+                UserId = userId
+            };
+
+            await GenerateTokenAsync(tokenCommand);
         }
 
-        public TokenDto GetToken(string key)
+        public string GetToken(string key)
         {
-            return _cache.Get(key)?.Value as TokenDto;
+            return _cache.Get(key)?.Value as string;
         }
 
-        private static string ParsingTokenToJson(GetTokenCommand tokenCommand, string token, DateTime expires,
+        private static TokenDto ParsingTokenToDto(GetTokenCommand tokenCommand, string token, DateTime expires,
             string refreshToken, IEnumerable<string> userClaims)
         {
-            var jsonToken = new TokenDto
+            var objToken = new TokenDto
             {
-                IdUser = tokenCommand.UserId,
+                UserId = tokenCommand.UserId,
                 IdSession = Guid.NewGuid().ToString(),
-                Token = token,
+                AccessToken = token,
                 ExperienceTime = expires.ToTimestamp(),
                 RefreshToken = refreshToken,
-                Claims = userClaims.ToList()
-            }.ToJSON();
-            return jsonToken;
+                Claims = userClaims?.ToList()
+            };
+            return objToken;
         }
 
+        private static string ParsingTokenToJson(TokenDto tokenDto)
+        {
+            return tokenDto.ToJSON();
+        }
+        
         private IEnumerable<Claim> PrepareClaims(int userId, DateTime nowTime, IEnumerable<string> userRoles)
         {
             var claims = new List<Claim>
@@ -119,7 +141,7 @@ namespace Identity.Application.Services
 
         private async Task<string> GenerateRefreshTokenAsync(int userId)
         {
-            return _passwordHasher.HashPassword(await _userService.GetAsync(userId), Guid.NewGuid().ToString())
+            return _passwordHasher.HashPassword(await _identityRepository.GetAsync(userId), Guid.NewGuid().ToString())
                 .Replace("+", string.Empty)
                 .Replace("=", string.Empty)
                 .Replace("/", string.Empty);

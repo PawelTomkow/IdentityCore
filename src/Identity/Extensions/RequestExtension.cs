@@ -6,7 +6,7 @@ namespace Identity.Extensions
     {
         public static string GenerateIdRequest()
         {
-            return $"{Guid.NewGuid().ToString()}{DateTime.UtcNow.ToString()}";
+            return $"{Guid.NewGuid().ToString()}";
         }
     }
 }

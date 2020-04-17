@@ -9,6 +9,6 @@ namespace Identity.Application.Services.Interfaces
         //TODO: Change to void and get token from cache!
         public Task GenerateTokenAsync(GetTokenCommand tokenCommand);
         public Task RefreshTokenAsync(RefreshTokenCommand refreshTokenCommand);
-        public TokenDto GetToken(string key);
+        public string GetToken(string key);
     }
 }
