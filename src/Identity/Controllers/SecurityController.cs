@@ -40,10 +40,16 @@ namespace Identity.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand refreshTokenCommand)
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenCommand command)
         {
-            await _tokenService.RefreshTokenAsync(refreshTokenCommand);
-            return Ok();
+            var idRequest = RequestExtension.GenerateIdRequest();
+            command.IdRequest = idRequest;
+            
+            await _tokenService.RefreshTokenAsync(command);
+
+            var token = _tokenService.GetToken(idRequest);
+            
+            return Ok(token);
         }
     }
 }

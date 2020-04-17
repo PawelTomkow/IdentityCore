@@ -15,6 +15,7 @@ namespace Identity.Core.Models
 
         protected Token() { }
 
+        public int TokenId { get; set; }
         public int UserId { get; protected set; }
         public string IdSession { get; protected set; }
         public string AccessToken { get; protected set; }

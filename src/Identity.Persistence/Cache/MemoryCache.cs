@@ -17,7 +17,7 @@ namespace Identity.Persistence.Cache
         }
         public void Add(CacheObject @object)
         {
-            _cache.Set(@object.Key, @object.Value, TimeSpan.FromSeconds(_settings.LifeTime));
+            _cache.Set(@object.Key, @object, TimeSpan.FromSeconds(_settings.LifeTime));
         }
 
         public CacheObject Get(string key)

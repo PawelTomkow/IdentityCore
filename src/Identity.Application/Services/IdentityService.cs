@@ -32,6 +32,7 @@ namespace Identity.Application.Services
                 throw new IdentityExceptions(ErrorCodes.InvalidCredentials, "Invalid credentials");
             await _tokenService.GenerateTokenAsync(new GetTokenCommand
             {
+                IdRequest = loginCommand.IdRequest,
                 UserId = user.Id
             });
         }

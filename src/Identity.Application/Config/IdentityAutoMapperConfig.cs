@@ -4,9 +4,9 @@ using Identity.Core.Models;
 
 namespace Identity.Application.Config
 {
-    public class AutoMapperConfig : Profile
+    public class IdentityAutoMapperConfig : Profile
     {
-        public AutoMapperConfig()
+        public IdentityAutoMapperConfig()
         {
             CreateMap<TokenDto, Token>();
             CreateMap<Token, TokenDto>();
