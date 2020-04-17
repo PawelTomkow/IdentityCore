@@ -33,7 +33,7 @@ namespace Identity.Extensions
         {
 
             var errorCode = "error";
-            var statusCode = HttpStatusCode.BadRequest; 
+            var statusCode = HttpStatusCode.Unauthorized; 
             var exceptionType = exception.GetType();
             switch(exception)
             {
@@ -46,7 +46,7 @@ namespace Identity.Extensions
                     errorCode = "Unauthorized";
                     break;
                 case Exception e when exceptionType == typeof(DomainException):
-                    statusCode = HttpStatusCode.BadRequest;
+                    statusCode = HttpStatusCode.Unauthorized;
                     errorCode = e.Message;
                     break;    
                 case Exception e when  exceptionType == typeof(RepositoryException):
@@ -56,7 +56,11 @@ namespace Identity.Extensions
                 case Exception e when exceptionType == typeof(Exception):
                     statusCode = HttpStatusCode.InternalServerError;
                     errorCode = "Nie intere, bo kici kici";
-                    break;                       
+                    break;
+                default:
+                    statusCode = HttpStatusCode.Unauthorized; 
+                    errorCode = "error";
+                    break;
             }
             
             var response = new { code = errorCode, message = exception.Message };

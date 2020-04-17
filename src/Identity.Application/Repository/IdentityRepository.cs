@@ -30,7 +30,7 @@ namespace Identity.Application.Repository
 
         public async Task<User> GetAsync(string login)
         {
-            return await _context.Users.Where(user => user.Username == login).FirstOrDefaultAsync();
+            return await _context.Users.Where(user => user.Email == login).FirstOrDefaultAsync();
         }
 
         public async Task AddAsync(User user)

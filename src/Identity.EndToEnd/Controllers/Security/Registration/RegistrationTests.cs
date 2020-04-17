@@ -19,7 +19,7 @@ namespace Identity.EndToEnd.Controllers.Security.Registration
             var response = await Client.PostAsync(Endpoint, payload);
             
             //assert
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Fact]
