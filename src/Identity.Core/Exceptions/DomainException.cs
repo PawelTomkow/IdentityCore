@@ -9,15 +9,15 @@ namespace Identity.Core.Exceptions
         {
         }
 
-        protected DomainException(SerializationInfo? info, StreamingContext context) : base(info, context)
+        protected DomainException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
 
-        public DomainException(string? message) : base(message)
+        public DomainException(string message) : base(message)
         {
         }
 
-        public DomainException(string? message, Exception? innerException) : base(message, innerException)
+        public DomainException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }
