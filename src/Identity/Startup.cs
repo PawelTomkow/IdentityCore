@@ -8,6 +8,7 @@ using Identity.Core.Repository;
 using Identity.Extensions;
 using Identity.Persistence.Cache;
 using Identity.Persistence.Context;
+using Identity.Persistence.Extensions;
 using Identity.Persistence.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -53,11 +54,12 @@ namespace Identity
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "HomeBackend"); });
+                app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity"); });
             }
 
-            app.
-                UseHttpsRedirection()
+            
+            app
+                .UseHttpsRedirection()
                 .UseRouting()
                 .UseCustomExceptionHandler();
 
@@ -110,6 +112,8 @@ namespace Identity
                 sp.GetRequiredService<IOptions<CacheSettings>>().Value);
             services.AddSingleton(sp =>
                 sp.GetRequiredService<IOptions<SecuritySettings>>().Value);
+            services.AddSingleton(sp =>
+                sp.GetRequiredService<IOptions<DatabaseConfig>>().Value);
         }
 
         private void InitializeConfigurations(IServiceCollection services)

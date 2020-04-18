@@ -11,10 +11,12 @@ namespace Identity.Application.Repository
     public class TokenRepository : ITokenRepository
     {
         private readonly IdentityContext _context;
+        private readonly IIdentityRepository _identityRepository;
 
-        public TokenRepository(IdentityContext context)
+        public TokenRepository(IdentityContext context, IIdentityRepository identityRepository)
         {
             _context = context;
+            _identityRepository = identityRepository;
         }
         
         public async Task AddAsync(Token token)
@@ -31,7 +33,20 @@ namespace Identity.Application.Repository
                 throw new RepositoryException($"Not found refresh token: {refreshToken}");
             }
 
-            return token.UserId;
+            return token.User.Id;
+        }
+
+        public async Task AddAsync(Token token, int userId)
+        {
+            var user = await _identityRepository.GetAsync(userId);
+            if (user == null)
+            {
+                throw new RepositoryException("TokenRepository: not found user.");
+            }
+
+            token.User = user;
+            await _context.AddAsync(token);
+            await _context.SaveChangesAsync();
         }
     }
 }

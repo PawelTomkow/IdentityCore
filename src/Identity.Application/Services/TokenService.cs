@@ -72,7 +72,7 @@ namespace Identity.Application.Services
 
             var tokenDatabaseModel = _mapper.Map<Token>(objToken);
 
-            await _tokenRepository.AddAsync(tokenDatabaseModel);
+            await _tokenRepository.AddAsync(tokenDatabaseModel,tokenCommand.UserId);
             _cache.Add(GenerateCacheObject(tokenCommand.IdRequest, jsonToken));
         }
 
@@ -98,8 +98,7 @@ namespace Identity.Application.Services
         {
             var objToken = new TokenDto
             {
-                UserId = tokenCommand.UserId,
-                IdSession = Guid.NewGuid().ToString(),
+                IdSession = tokenCommand.IdRequest,
                 AccessToken = token,
                 ExperienceTime = expires.ToTimestamp(),
                 RefreshToken = refreshToken,

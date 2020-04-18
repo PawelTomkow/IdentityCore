@@ -1,4 +1,5 @@
-﻿using Identity.Core.Models;
+﻿using System.Threading.Tasks;
+using Identity.Core.Models;
 using Identity.Persistence.TableConfiguration;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,11 @@ namespace Identity.Persistence.Context
         public IdentityContext(DbContextOptions options) : base(options)
         { }
 
+        public void RunMigration()
+        {
+            Database.Migrate();
+        }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder

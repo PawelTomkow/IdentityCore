@@ -6,11 +6,10 @@ namespace Identity.Application.DTOs
 {
     public class TokenDto : ICommand
     {
-        [JsonProperty("idUser")] public int UserId { get; set; }
-
+        [JsonProperty("tokenId")] public int TokenId { get; set; }
         [JsonProperty("idSession")] public string IdSession { get; set; }
 
-        [JsonProperty("token")] public string AccessToken { get; set; }
+        [JsonProperty("accessToken")] public string AccessToken { get; set; }
 
         [JsonProperty("refreshToken")] public string RefreshToken { get; set; }
 

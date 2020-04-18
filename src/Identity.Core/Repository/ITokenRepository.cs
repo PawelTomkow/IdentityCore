@@ -7,5 +7,6 @@ namespace Identity.Core.Repository
     {
         Task AddAsync(Token token);
         Task<int> GetUserIdAsync(string refreshToken);
+        Task AddAsync(Token token, int userId);
     }
 }
