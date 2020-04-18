@@ -50,20 +50,23 @@ namespace Identity.Migrations
                 name: "Tokens",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(nullable: false),
+                    TokenId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     IdSession = table.Column<string>(nullable: true),
                     AccessToken = table.Column<string>(nullable: true),
                     RefreshToken = table.Column<string>(nullable: true),
-                    ExperienceTime = table.Column<long>(nullable: false)
+                    ExperienceTime = table.Column<long>(nullable: false),
+                    UserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_Tokens", x => x.TokenId);
                     table.ForeignKey(
                         name: "FK_Tokens_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -74,8 +77,7 @@ namespace Identity.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Tokens_UserId",
                 table: "Tokens",
-                column: "UserId",
-                unique: true);
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
