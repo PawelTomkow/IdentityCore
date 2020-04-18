@@ -9,14 +9,17 @@ namespace Identity.Persistence.Extensions
     {
         public static IApplicationBuilder UseMigrationIdentity(this IApplicationBuilder app)
         {
-            var db = app.ApplicationServices.GetService<IdentityContext>();
-            var dbConfig = app.ApplicationServices.GetService<DatabaseConfig>();
-            
-            if (dbConfig?.Migrations == true)
+            using (var serviceScope = app.ApplicationServices.CreateScope())
             {
-                db?.RunMigration();
+                var db = serviceScope.ServiceProvider.GetService<IdentityContext>();
+                var dbConfig = app.ApplicationServices.GetService<DatabaseConfig>();
+            
+                if (dbConfig?.Migrations == true)
+                {
+                    db?.RunMigration();
+                }
             }
-
+            
             return app;
         }
     }

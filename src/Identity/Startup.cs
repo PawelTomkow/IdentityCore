@@ -56,13 +56,15 @@ namespace Identity
                 app.UseSwagger();
                 app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity"); });
             }
-
             
             app
+                .UseMigrationIdentity()
                 .UseHttpsRedirection()
                 .UseRouting()
                 .UseCustomExceptionHandler();
 
+
+            
             // app.UseAuthorization();
             app.UseCors("AllowAll")
                 .UseEndpoints(endpoints => { endpoints.MapControllers(); });
@@ -124,6 +126,8 @@ namespace Identity
                 Configuration.GetSection(nameof(CacheSettings)));
             services.Configure<SecuritySettings>(
                 Configuration.GetSection(nameof(SecuritySettings)));
+            services.Configure<DatabaseConfig>(
+                Configuration.GetSection(nameof(DatabaseConfig)));
         }
 
         private void RegisterServices(IServiceCollection services)
