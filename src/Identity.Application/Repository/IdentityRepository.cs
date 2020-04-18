@@ -28,9 +28,14 @@ namespace Identity.Application.Repository
             return await _context.Users.Where(user => user.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<User> GetAsync(string login)
+        public async Task<User> GetAsync(string userName)
         {
-            return await _context.Users.Where(user => user.Email == login).FirstOrDefaultAsync();
+            return await _context.Users.Where(user => user.Username == userName).FirstOrDefaultAsync();
+        }
+
+        public async Task<User> GetByMailAsync(string mail)
+        {
+            return await _context.Users.Where(user => user.Email.Equals(mail)).FirstOrDefaultAsync();
         }
 
         public async Task AddAsync(User user)

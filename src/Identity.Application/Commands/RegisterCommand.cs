@@ -1,4 +1,6 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
+
 namespace Identity.Application.Commands
 {
     public class RegisterCommand : ICommand

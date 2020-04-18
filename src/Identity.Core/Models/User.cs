@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 using Identity.Core.Exceptions;
 
@@ -9,7 +11,6 @@ namespace Identity.Core.Models
     public class User
     {
         private static readonly Regex NameRegex = new Regex("^(?![_.-])(?!.*[_.-]{2})[a-zA-Z0-9._.-]+(?<![_.-])$");
-
         protected User()
         {
         }
@@ -24,6 +25,7 @@ namespace Identity.Core.Models
         }
 
         public int Id { get; protected set; }
+        
         public string Email { get; protected set; }
         public string Password { get; protected set; }
         public string Salt { get; protected set; }
@@ -46,11 +48,13 @@ namespace Identity.Core.Models
 
         public void SetEmail(string email)
         {
-            if (string.IsNullOrWhiteSpace(email))
-                throw new DomainException("Email can not be empty.");
-            if (Email == email) return;
+            var address = new MailAddress(email);
 
-            Email = email.ToLowerInvariant();
+            if (string.IsNullOrWhiteSpace(address.Address))
+                throw new DomainException("Email can not be empty.");
+            if (Email == address.Address) return;
+
+            Email = address.Address.ToLowerInvariant();
             UpdatedAt = DateTime.UtcNow;
         }
 

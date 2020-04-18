@@ -8,7 +8,8 @@ namespace Identity.Core.Repository
     {
         public Task<IEnumerable<User>> GetAllAsync();
         public Task<User> GetAsync(int id);
-        public Task<User> GetAsync(string login);
+        public Task<User> GetAsync(string userName);
+        Task<User> GetByMailAsync(string mail);
         public Task AddAsync(User user);
         public Task EditAsync(User user);
         public Task DeleteAsync(User user);

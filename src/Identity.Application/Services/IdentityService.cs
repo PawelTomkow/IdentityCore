@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Identity.Application.Commands;
 using Identity.Application.Exceptions;
+using Identity.Application.Extensions;
 using Identity.Application.Services.Interfaces;
 using Identity.Core.Models;
 using Identity.Core.Repository;
@@ -24,6 +25,8 @@ namespace Identity.Application.Services
 
         public async Task LoginAsync(LoginCommand loginCommand)
         {
+            loginCommand.Normalize();
+            
             var user = await _identityRepository.GetAsync(loginCommand.Login);
             if (user == null) throw new IdentityExceptions(ErrorCodes.InvalidCredentials, "Invalid credentials");
 
@@ -39,12 +42,20 @@ namespace Identity.Application.Services
 
         public async Task RegisterAsync(RegisterCommand registerCommand)
         {
-            var user = await _identityRepository.GetAsync(registerCommand.Email);
+            registerCommand.Normalize();
+            
+            var user = await _identityRepository.GetAsync(registerCommand.Username);
+            if (user != null)
+            {
+                throw new IdentityExceptions($"User with username: '{registerCommand.Username}' already exists.");
+            }
+
+            user = await _identityRepository.GetByMailAsync(registerCommand.Email);
             if(user != null)
             {
                 throw new IdentityExceptions($"User with email: '{registerCommand.Email}' already exists.");
             }
-
+            
             var salt = _encrypter.GetSalt(registerCommand.Password);
             var hash = _encrypter.GetHash(registerCommand.Password, salt);
             user = new User(registerCommand.Email,  registerCommand.Username, hash, salt);
