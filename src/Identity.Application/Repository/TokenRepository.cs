@@ -27,7 +27,10 @@ namespace Identity.Application.Repository
 
         public async Task<int> GetUserIdAsync(string refreshToken)
         {
-            var token = await _context.Tokens.Where(token => token.RefreshToken.Equals(refreshToken)).FirstOrDefaultAsync();
+            var token = await _context.Tokens
+                .Include(i => i.User)
+                .Where(token1 => token1.RefreshToken.Equals(refreshToken))
+                .FirstOrDefaultAsync();
             if (token == null)
             {
                 throw new RepositoryException($"Not found refresh token: {refreshToken}");

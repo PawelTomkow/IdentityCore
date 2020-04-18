@@ -19,7 +19,7 @@ namespace Identity.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Identity.Core.Domain.Role", b =>
+            modelBuilder.Entity("Identity.Core.Models.Role", b =>
                 {
                     b.Property<int>("IdRole")
                         .ValueGeneratedOnAdd()
@@ -42,8 +42,13 @@ namespace Identity.Migrations
                     b.ToTable("Role");
                 });
 
-            modelBuilder.Entity("Identity.Core.Domain.Token", b =>
+            modelBuilder.Entity("Identity.Core.Models.Token", b =>
                 {
+                    b.Property<int>("TokenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<string>("AccessToken")
                         .HasColumnType("nvarchar(max)");
 
@@ -56,16 +61,17 @@ namespace Identity.Migrations
                     b.Property<string>("RefreshToken")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasKey("TokenId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Tokens");
                 });
 
-            modelBuilder.Entity("Identity.Core.Domain.User", b =>
+            modelBuilder.Entity("Identity.Core.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,20 +101,18 @@ namespace Identity.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Identity.Core.Domain.Role", b =>
+            modelBuilder.Entity("Identity.Core.Models.Role", b =>
                 {
-                    b.HasOne("Identity.Core.Domain.User", null)
+                    b.HasOne("Identity.Core.Models.User", null)
                         .WithMany("Roles")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("Identity.Core.Domain.Token", b =>
+            modelBuilder.Entity("Identity.Core.Models.Token", b =>
                 {
-                    b.HasOne("Identity.Core.Domain.User", "User")
-                        .WithOne()
-                        .HasForeignKey("Identity.Core.Domain.Token", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Identity.Core.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }
