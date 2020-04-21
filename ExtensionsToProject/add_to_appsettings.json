@@ -1,0 +1,8 @@
+{
+  "IdentitySettings" : 
+  {
+    "Secret" : "!secret_identity_123",
+    "Issuer" : "https://localhost:18765",
+    "Audience" : "https://localhost:18768"
+  }
+}
