@@ -61,6 +61,7 @@ namespace Identity.Application.Services
             
             var jwt = new JwtSecurityToken(
                 _securitySettings.Issuer,
+                _securitySettings.Audience,
                 claims: claims,
                 notBefore: now,
                 expires: expires,
