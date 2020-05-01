@@ -1,4 +1,6 @@
 ﻿using Identity.Application.Commands;
+using Identity.Application.Commands.Auth.Login;
+using Identity.Application.Commands.Auth.Register;
 
 namespace Identity.Application.Extensions
 {
@@ -12,7 +14,7 @@ namespace Identity.Application.Extensions
 
         public static void Normalize(this LoginCommand command)
         {
-            command.Login = command.Login.ToLower();
+            command.Username = command.Username.ToLower();
         }
     }
 }

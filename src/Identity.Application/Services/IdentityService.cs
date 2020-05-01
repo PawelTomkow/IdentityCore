@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using Identity.Application.Commands;
+using Identity.Application.Commands.Auth.Login;
+using Identity.Application.Commands.Auth.Register;
 using Identity.Application.Exceptions;
 using Identity.Application.Extensions;
 using Identity.Application.Services.Interfaces;
@@ -27,7 +29,7 @@ namespace Identity.Application.Services
         {
             loginCommand.Normalize();
             
-            var user = await _identityRepository.GetAsync(loginCommand.Login);
+            var user = await _identityRepository.GetAsync(loginCommand.Username);
             if (user == null) throw new IdentityExceptions(ErrorCodes.InvalidCredentials, "Invalid credentials");
 
             var hash = _encrypter.GetHash(loginCommand.Password, user.Salt);

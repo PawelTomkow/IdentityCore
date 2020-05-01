@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Identity.Application.Commands;
+using Identity.Application.Commands.Auth.Login;
+using Identity.Application.Commands.Auth.RefreshToken;
 using Identity.Application.DTOs;
 
 namespace Identity.Application.Services.Interfaces
