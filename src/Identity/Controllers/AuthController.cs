@@ -1,5 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Identity.Application.Commands;
+using Identity.Application.Commands.Auth.Login;
+using Identity.Application.Commands.Auth.RefreshToken;
+using Identity.Application.Commands.Auth.Register;
 using Identity.Application.Services.Interfaces;
 using Identity.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -7,12 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace Identity.Controllers
 {
     [Route("[controller]/[action]")]
-    public class SecurityController : BaseApiController
+    public class AuthController : BaseApiController
     {
         private readonly IIdentityService _identityService;
         private readonly ITokenService _tokenService;
 
-        public SecurityController(IIdentityService identityService,
+        public AuthController(IIdentityService identityService,
             ITokenService tokenService)
         {
             _identityService = identityService;

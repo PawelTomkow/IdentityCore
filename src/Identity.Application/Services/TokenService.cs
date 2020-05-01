@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Identity.Application.Commands;
+using Identity.Application.Commands.Auth.Login;
+using Identity.Application.Commands.Auth.RefreshToken;
 using Identity.Application.DTOs;
 using Identity.Application.Extensions;
 using Identity.Application.Services.Interfaces;

@@ -1,8 +1,7 @@
-
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Identity.Application.Commands
+namespace Identity.Application.Commands.Auth.RefreshToken
 {
     public class RefreshTokenCommand : ICommand
     {

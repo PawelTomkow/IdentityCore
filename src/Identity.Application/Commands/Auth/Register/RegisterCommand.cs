@@ -1,7 +1,5 @@
 ﻿
-using System.ComponentModel.DataAnnotations;
-
-namespace Identity.Application.Commands
+namespace Identity.Application.Commands.Auth.Register
 {
     public class RegisterCommand : ICommand
     {
