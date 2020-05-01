@@ -101,12 +101,8 @@ namespace Identity
                 .UseMigrationIdentity()
                 .UseHttpsRedirection()
                 .UseRouting()
-                .UseCustomExceptionHandler();
-
-
-            
-            // app.UseAuthorization();
-            app.UseCors("AllowAll")
+                .UseCustomExceptionHandler()
+                .UseCors("AllowAll")
                 .UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
