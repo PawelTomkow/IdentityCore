@@ -26,14 +26,12 @@ namespace Identity
     public class Startup
     {
         private readonly string _projectName;
-        private readonly string _persistenceProjectName;
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
             _projectName = Configuration.GetSection("Project").GetValue<string>("Name");
-            _persistenceProjectName = Configuration.GetSection("Subprojects").GetValue<string>("Persistence");
         }
         
         // This method gets called by the runtime. Use this method to add services to the container.
