@@ -32,38 +32,27 @@ namespace Identity.Extensions
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
 
-            var errorCode = "error";
-            var statusCode = HttpStatusCode.Unauthorized; 
+            var errorCode = "Unknown error";
+            var statusCode = HttpStatusCode.InternalServerError;
+            var message = "";
             var exceptionType = exception.GetType();
             switch(exception)
             {
-                case Exception e when exceptionType == typeof(UnauthorizedAccessException):
+                case { } e when exceptionType == typeof(UnauthorizedAccessException) 
+                                || exceptionType == typeof(IdentityExceptions) 
+                                || exceptionType == typeof(DomainException) 
+                                || exceptionType == typeof(RepositoryException):
                     statusCode = HttpStatusCode.Unauthorized;
                     errorCode = "Unauthorized";
-                    break;
-                case Exception e when exceptionType == typeof(IdentityExceptions):
-                    statusCode = HttpStatusCode.Unauthorized;
-                    errorCode = "Unauthorized";
-                    break;
-                case Exception e when exceptionType == typeof(DomainException):
-                    statusCode = HttpStatusCode.Unauthorized;
-                    errorCode = e.Message;
-                    break;    
-                case Exception e when  exceptionType == typeof(RepositoryException):
-                    statusCode = HttpStatusCode.NoContent;
-                    errorCode = "No Content";
-                    break;
-                case Exception e when exceptionType == typeof(Exception):
-                    statusCode = HttpStatusCode.InternalServerError;
-                    errorCode = "Nie intere, bo kici kici";
+                    message = exception.Message;
                     break;
                 default:
-                    statusCode = HttpStatusCode.Unauthorized; 
-                    errorCode = "error";
+                    statusCode = HttpStatusCode.InternalServerError;
+                    message = "Nie intere, bo kici kici";
                     break;
             }
             
-            var response = new { code = errorCode, message = exception.Message };
+            var response = new { code = errorCode, message };
             var payload = JsonConvert.SerializeObject(response);
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
