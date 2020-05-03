@@ -3,6 +3,7 @@ using Identity.Application.Repository;
 using Identity.Application.Services;
 using Identity.Application.Services.Interfaces;
 using Identity.Application.Settings;
+using Identity.Controllers.Filters;
 using Identity.Core.Models;
 using Identity.Core.Repository;
 using Identity.Extensions;
@@ -37,13 +38,6 @@ namespace Identity
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
-            services.AddControllers(options =>
-            {
-                options.RespectBrowserAcceptHeader = false;
-                options.ReturnHttpNotAcceptable = false;
-            });
-
             services.AddSingleton(Configuration);
 
             services
@@ -61,7 +55,7 @@ namespace Identity
                     sp.GetRequiredService<IOptions<SecuritySettings>>().Value)
                 .AddSingleton(sp =>
                     sp.GetRequiredService<IOptions<DatabaseConfig>>().Value);
-            
+
             services
                 .AddMemoryCache()
                 .AddCustomContext(Configuration, _projectName)
@@ -83,6 +77,14 @@ namespace Identity
                                 .AllowAnyHeader();
                             // .AllowCredentials(); //TODO: turn on when add auth!
                         });
+                })
+                .AddFilters()
+                .AddControllers(options =>
+                {
+                    options.RespectBrowserAcceptHeader = true;
+                    options.ReturnHttpNotAcceptable = true;
+                    options.Filters.Add(typeof(ContentTypeFilter));
+                    options.Filters.Add(typeof(ValidateModelAttribute));
                 });
         }
 

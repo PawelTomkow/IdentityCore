@@ -3,6 +3,7 @@ using Identity.Application.Config;
 using Identity.Application.Repository;
 using Identity.Application.Services;
 using Identity.Application.Services.Interfaces;
+using Identity.Controllers.Filters;
 using Identity.Core.Repository;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,20 +21,27 @@ namespace Identity.Extensions
             return services;
         }
 
+        public static IServiceCollection AddFilters(this IServiceCollection services)
+        {
+            services.AddScoped<ContentTypeFilter>();
+            services.AddScoped<ValidateModelAttribute>();
+            return services;
+        }
+        
         public static IServiceCollection AddIdentityRepositories(this IServiceCollection services)
         {
-            services.AddTransient<IIdentityRepository, IdentityRepository>();
-            services.AddTransient<ITokenRepository, TokenRepository>();
+            services.AddScoped<IIdentityRepository, IdentityRepository>();
+            services.AddScoped<ITokenRepository, TokenRepository>();
 
             return services;
         }
 
         public static IServiceCollection AddIdentityServices(this IServiceCollection services)
         {
-            services.AddTransient<IEncrypter, Encrypter>();
+            services.AddScoped<IEncrypter, Encrypter>();
             
-            services.AddTransient<ITokenService, TokenService>();
-            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IIdentityService, IdentityService>();
 
             return services;
         }

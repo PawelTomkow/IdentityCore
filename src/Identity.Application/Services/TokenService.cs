@@ -60,8 +60,8 @@ namespace Identity.Application.Services
                 SecurityAlgorithms.HmacSha256);
             
             var jwt = new JwtSecurityToken(
-                _securitySettings.Issuer,
-                _securitySettings.Audience,
+                issuer: _securitySettings.Issuer,
+                audience: _securitySettings.Audience,
                 claims: claims,
                 notBefore: now,
                 expires: expires,
