@@ -32,7 +32,8 @@ namespace Identity.Extensions
         {
             services.AddScoped<IIdentityRepository, IdentityRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
-
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            
             return services;
         }
 

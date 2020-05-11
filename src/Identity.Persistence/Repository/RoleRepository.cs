@@ -1,45 +1,81 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Identity.Core.Models;
 using Identity.Core.Repository;
+using Identity.Persistence.Context;
+using Identity.Persistence.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Persistence.Repository
 {
     public class RoleRepository : IRoleRepository
     {
-        public RoleRepository()
+        private readonly IdentityContext _context;
+
+        public RoleRepository(IdentityContext context)
         {
-            
+            _context = context;
         }
 
-        public async Task<List<Role>> GetAll()
+        public async Task<List<Role>> GetAllAsync()
         {
-            throw new System.NotImplementedException();
+            return await _context.Roles.ToListAsync();
         }
 
-        public async Task<Role> Get(int id)
+        public async Task<Role> GetAsync(int id)
         {
-            throw new System.NotImplementedException();
+            var response = await _context.Roles.Where(i => i.IdRole == id).FirstOrDefaultAsync();
+            if (response is null)
+            {
+                throw new RepositoryException($"User {id} not found.");
+            }
+
+            return response;
         }
 
-        public async Task<Role> Get(string name)
+        public async Task<Role> GetAsync(string name)
         {
-            throw new System.NotImplementedException();
+            var response = await _context.Roles.Where(i => i.Name == name).FirstOrDefaultAsync();
+            if (response is null)
+            {
+                throw new RepositoryException($"Role {name} not found.");
+            }
+
+            return response;
         }
 
-        public async Task Add(Role role)
+        public async Task AddAsync(Role role)
         {
-            throw new System.NotImplementedException();
+            await _context.Roles.AddAsync(role);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task Update(Role role)
+        public async Task EditAsync(Role role)
         {
-            throw new System.NotImplementedException();
+            var ctx = await _context.Roles.Where(role1 => role1.IdRole == role.IdRole).FirstOrDefaultAsync();
+            if (ctx is null)
+            {
+                throw new RepositoryException($"Role {role.Name} not exist.");
+            }
+
+            ctx.Name = role.Name;
+            ctx.Value = role.Value;
+
+            _context.Roles.Update(ctx);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(Role role)
+        public async Task DeleteAsync(Role role)
         {
-            throw new System.NotImplementedException();
+            var ctx = await _context.Roles.Where(role1 => role1.IdRole == role.IdRole).FirstOrDefaultAsync();
+            if (ctx is null)
+            {
+                throw new RepositoryException($"Role {role.Name} not exist.");
+            }
+
+            _context.Roles.Remove(ctx);
+            await _context.SaveChangesAsync();
         }
     }
 }
