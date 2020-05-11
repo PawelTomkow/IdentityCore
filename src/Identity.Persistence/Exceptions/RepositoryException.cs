@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Identity.Application.Exceptions
+namespace Identity.Persistence.Exceptions
 {
     public class RepositoryException : Exception
     {

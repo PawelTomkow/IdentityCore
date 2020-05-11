@@ -11,6 +11,7 @@ namespace Identity.Extensions
             IConfiguration configuration, 
             string projectName)
         {
+            
             services.AddDbContext<IdentityContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("IdentityDatabase"), x
                     => x.MigrationsAssembly(projectName)));
