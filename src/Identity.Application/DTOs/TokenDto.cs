@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Identity.Application.Commands;
+﻿using Identity.Application.Commands;
 using Newtonsoft.Json;
 
 namespace Identity.Application.DTOs
