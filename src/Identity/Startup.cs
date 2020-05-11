@@ -57,7 +57,7 @@ namespace Identity
 
             services
                 .AddMemoryCache()
-                .AddCustomContext(Configuration, _projectName)
+                .AddCustomContext(_projectName)
                 .AddSingleton<ICache, MemoryCache>()
                 .AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>()
                 .AddAutoMapper()
