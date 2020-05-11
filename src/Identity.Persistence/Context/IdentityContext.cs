@@ -9,6 +9,7 @@ namespace Identity.Persistence.Context
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Token> Tokens { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
         public IdentityContext(DbContextOptions options) : base(options)
         { }
