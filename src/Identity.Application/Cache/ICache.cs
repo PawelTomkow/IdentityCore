@@ -1,6 +1,6 @@
-﻿using Identity.Persistence.Models;
+﻿using Identity.Core.Models;
 
-namespace Identity.Persistence.Cache
+namespace Identity.Application.Cache
 {
     public interface ICache
     {

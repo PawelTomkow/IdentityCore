@@ -1,9 +1,9 @@
 ﻿using System;
-using Identity.Persistence.Models;
-using Identity.Persistence.Settings;
+using Identity.Application.Settings;
+using Identity.Core.Models;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Identity.Persistence.Cache
+namespace Identity.Application.Cache
 {
     public class MemoryCache : ICache
     {

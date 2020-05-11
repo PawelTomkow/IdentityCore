@@ -1,5 +1,5 @@
 using AutoMapper;
-using Identity.Application.Repository;
+using Identity.Application.Cache;
 using Identity.Application.Services;
 using Identity.Application.Services.Interfaces;
 using Identity.Application.Settings;
@@ -7,7 +7,6 @@ using Identity.Controllers.Filters;
 using Identity.Core.Models;
 using Identity.Core.Repository;
 using Identity.Extensions;
-using Identity.Persistence.Cache;
 using Identity.Persistence.Context;
 using Identity.Persistence.Extensions;
 using Identity.Persistence.Settings;
@@ -20,7 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using MemoryCache = Identity.Persistence.Cache.MemoryCache;
+using MemoryCache = Identity.Application.Cache.MemoryCache;
     
 namespace Identity
 {
@@ -58,7 +57,7 @@ namespace Identity
 
             services
                 .AddMemoryCache()
-                .AddCustomContext(Configuration, _projectName)
+                .AddCustomContext(_projectName)
                 .AddSingleton<ICache, MemoryCache>()
                 .AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>()
                 .AddAutoMapper()

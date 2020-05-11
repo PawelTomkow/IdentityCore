@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Identity.Application.Exceptions;
 using Identity.Core.Exceptions;
+using Identity.Persistence.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 

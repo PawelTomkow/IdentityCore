@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Identity.Application.Config;
-using Identity.Application.Repository;
 using Identity.Application.Services;
 using Identity.Application.Services.Interfaces;
 using Identity.Controllers.Filters;
 using Identity.Core.Repository;
+using Identity.Persistence.Repository;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Identity.Extensions

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Identity.Persistence.Models
+﻿namespace Identity.Core.Models
 {
     public class CacheObject
     {
