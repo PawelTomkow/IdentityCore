@@ -46,7 +46,11 @@ namespace Identity.Persistence.Repository
 
         public async Task EditAsync(User user)
         {
-            var contextUser = await _context.Users.Where(usr => usr.Id == user.Id).FirstOrDefaultAsync();
+            var contextUser = await _context.Users
+                .Include(r=>r.Roles)
+                .Where(usr => usr.Id == user.Id)
+                .FirstOrDefaultAsync();
+            
             if (contextUser != null)
             {
                 contextUser.SetEmail(user.Email);
@@ -73,7 +77,11 @@ namespace Identity.Persistence.Repository
 
         public async Task<IEnumerable<Role>> GetUserRoleAsync(int tokenCommandUserId)
         {
-            var result = await _context.Users.Where(usr => usr.Id == tokenCommandUserId).FirstOrDefaultAsync();
+            var result = await _context.Users
+                .Include(r => r.Roles)
+                .Where(usr => usr.Id == tokenCommandUserId)
+                .FirstOrDefaultAsync();
+            
             return result.Roles?.ToArray();
         }
     }

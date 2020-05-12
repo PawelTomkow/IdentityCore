@@ -4,9 +4,11 @@ using Identity.Application.Commands.Role;
 using Identity.Application.Services.Interfaces;
 using Identity.Core.Models;
 using Identity.Core.Repository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Identity.Application.Services
 {
+    [Authorize(Roles = "superuser")]
     public class RoleService : IRoleService
     {
         private readonly IRoleRepository _repository;

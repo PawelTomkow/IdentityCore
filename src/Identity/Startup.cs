@@ -57,6 +57,7 @@ namespace Identity
 
             services
                 .AddMemoryCache()
+                .AddCustomIdentity()
                 .AddCustomContext(_projectName)
                 .AddSingleton<ICache, MemoryCache>()
                 .AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>()
@@ -101,6 +102,7 @@ namespace Identity
                 .UseMigrationIdentity()
                 .UseHttpsRedirection()
                 .UseRouting()
+                .UseCustomIdentity()
                 .UseCustomExceptionHandler()
                 .UseCors("AllowAll")
                 .UseEndpoints(endpoints => { endpoints.MapControllers(); });
