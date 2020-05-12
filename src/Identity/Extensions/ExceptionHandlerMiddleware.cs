@@ -35,8 +35,8 @@ namespace Identity.Extensions
         {
 
             var errorCode = "Unknown error";
-            var statusCode = HttpStatusCode.InternalServerError;
-            var message = "";
+            HttpStatusCode statusCode;
+            string message;
             var exceptionType = exception.GetType();
             switch(exception)
             {
