@@ -57,12 +57,14 @@ namespace Identity
 
             services
                 .AddMemoryCache()
+                .AddCustomIdentity()
                 .AddCustomContext(_projectName)
                 .AddSingleton<ICache, MemoryCache>()
                 .AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>()
                 .AddAutoMapper()
                 .AddIdentityRepositories()
                 .AddIdentityServices()
+                .AddRoleServiceCollection()
                 .AddSwaggerGen(
                     c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "HomeBackend", Version = "v1"}); })
                 .AddCors(options =>
@@ -100,6 +102,7 @@ namespace Identity
                 .UseMigrationIdentity()
                 .UseHttpsRedirection()
                 .UseRouting()
+                .UseCustomIdentity()
                 .UseCustomExceptionHandler()
                 .UseCors("AllowAll")
                 .UseEndpoints(endpoints => { endpoints.MapControllers(); });

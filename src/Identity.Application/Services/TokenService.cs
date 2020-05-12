@@ -69,7 +69,7 @@ namespace Identity.Application.Services
 
             var token = new JwtSecurityTokenHandler().WriteToken(jwt);
             var refreshToken = await GenerateRefreshTokenAsync(tokenCommand.UserId);
-            var objToken = ParsingTokenToDto(tokenCommand, token, expires, refreshToken, userRoles);
+            var objToken = ParsingTokenToDto(token, refreshToken);
             var jsonToken = ParsingTokenToJson(objToken);
 
             var tokenDatabaseModel = _mapper.Map<Token>(objToken);
@@ -95,16 +95,12 @@ namespace Identity.Application.Services
             return _cache.Get(key)?.Value as string;
         }
 
-        private static TokenDto ParsingTokenToDto(GetTokenCommand tokenCommand, string token, DateTime expires,
-            string refreshToken, IEnumerable<string> userClaims)
+        private static TokenDto ParsingTokenToDto(string token, string refreshToken)
         {
             var objToken = new TokenDto
             {
-                IdSession = tokenCommand.IdRequest,
                 AccessToken = token,
-                ExperienceTime = expires.ToTimestamp(),
                 RefreshToken = refreshToken,
-                Claims = userClaims?.ToList()
             };
             return objToken;
         }
