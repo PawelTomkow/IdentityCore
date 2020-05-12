@@ -46,5 +46,11 @@ namespace Identity.Extensions
 
             return services;
         }
+
+        public static IServiceCollection AddRoleServiceCollection(this IServiceCollection services)
+        {
+            services.AddScoped<IRoleService, RoleService>();
+            return services;
+        }
     }
 }

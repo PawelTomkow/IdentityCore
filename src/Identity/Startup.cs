@@ -63,6 +63,7 @@ namespace Identity
                 .AddAutoMapper()
                 .AddIdentityRepositories()
                 .AddIdentityServices()
+                .AddRoleServiceCollection()
                 .AddSwaggerGen(
                     c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "HomeBackend", Version = "v1"}); })
                 .AddCors(options =>

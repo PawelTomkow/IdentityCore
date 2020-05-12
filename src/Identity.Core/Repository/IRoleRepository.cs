@@ -10,7 +10,7 @@ namespace Identity.Core.Repository
         public Task<Role> GetAsync(int id);
         public Task<Role> GetAsync(string name);
         public Task AddAsync(Role role);
-        public Task EditAsync(Role role);
+        public Task UpdateAsync(Role role);
         public Task DeleteAsync(Role role);
     }
 }

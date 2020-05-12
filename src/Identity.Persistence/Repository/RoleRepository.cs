@@ -51,7 +51,7 @@ namespace Identity.Persistence.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task EditAsync(Role role)
+        public async Task UpdateAsync(Role role)
         {
             var ctx = await _context.Roles.Where(role1 => role1.IdRole == role.IdRole).FirstOrDefaultAsync();
             if (ctx is null)
