@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Identity.Application.Exceptions;
 using Identity.Core.Models;
 using Identity.Core.Repository;
 using Identity.Persistence.Context;
+using Identity.Persistence.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.Application.Repository
+namespace Identity.Persistence.Repository
 {
     public class IdentityRepository : IIdentityRepository
     {
@@ -46,7 +46,11 @@ namespace Identity.Application.Repository
 
         public async Task EditAsync(User user)
         {
-            var contextUser = await _context.Users.Where(usr => usr.Id == user.Id).FirstOrDefaultAsync();
+            var contextUser = await _context.Users
+                .Include(r=>r.Roles)
+                .Where(usr => usr.Id == user.Id)
+                .FirstOrDefaultAsync();
+            
             if (contextUser != null)
             {
                 contextUser.SetEmail(user.Email);
@@ -64,7 +68,7 @@ namespace Identity.Application.Repository
 
             if (userToDelete == null)
             {
-                throw new RepositoryException("User is null");
+                throw new RepositoryException("User not exist.");
             }
             
             _context.Users.Remove(userToDelete);
@@ -73,7 +77,11 @@ namespace Identity.Application.Repository
 
         public async Task<IEnumerable<Role>> GetUserRoleAsync(int tokenCommandUserId)
         {
-            var result = await _context.Users.Where(usr => usr.Id == tokenCommandUserId).FirstOrDefaultAsync();
+            var result = await _context.Users
+                .Include(r => r.Roles)
+                .Where(usr => usr.Id == tokenCommandUserId)
+                .FirstOrDefaultAsync();
+            
             return result.Roles?.ToArray();
         }
     }

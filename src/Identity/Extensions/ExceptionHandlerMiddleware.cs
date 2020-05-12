@@ -2,7 +2,9 @@
 using System.Net;
 using System.Threading.Tasks;
 using Identity.Application.Exceptions;
+using Identity.Application.Services;
 using Identity.Core.Exceptions;
+using Identity.Persistence.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 
@@ -33,8 +35,8 @@ namespace Identity.Extensions
         {
 
             var errorCode = "Unknown error";
-            var statusCode = HttpStatusCode.InternalServerError;
-            var message = "";
+            HttpStatusCode statusCode;
+            string message;
             var exceptionType = exception.GetType();
             switch(exception)
             {
@@ -44,6 +46,11 @@ namespace Identity.Extensions
                                 || exceptionType == typeof(RepositoryException):
                     statusCode = HttpStatusCode.Unauthorized;
                     errorCode = "Unauthorized";
+                    message = exception.Message;
+                    break;
+                case {} e when exceptionType == typeof(RoleException):
+                    statusCode = HttpStatusCode.BadRequest;
+                    errorCode = "Bad Request";
                     message = exception.Message;
                     break;
                 default:

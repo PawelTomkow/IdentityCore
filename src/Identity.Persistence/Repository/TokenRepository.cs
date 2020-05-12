@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Identity.Application.Exceptions;
 using Identity.Core.Models;
 using Identity.Core.Repository;
 using Identity.Persistence.Context;
+using Identity.Persistence.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.Application.Repository
+namespace Identity.Persistence.Repository
 {
     public class TokenRepository : ITokenRepository
     {

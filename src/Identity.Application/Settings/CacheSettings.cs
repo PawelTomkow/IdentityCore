@@ -1,4 +1,4 @@
-﻿namespace Identity.Persistence.Settings
+﻿namespace Identity.Application.Settings
 {
     public class CacheSettings
     {
