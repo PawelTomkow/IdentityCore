@@ -10,6 +10,16 @@ namespace Identity.Application.Config
         {
             CreateMap<TokenDto, Token>();
             CreateMap<Token, TokenDto>();
+
+            CreateMap<Role, RoleDto>();
+            CreateMap<RoleDto, Role>();
+
+            CreateMap<User, UserDto>()
+                .ForMember(dst => dst.Roles, 
+                    dst => dst.MapFrom(src => src.Roles));
+            CreateMap<UserDto, User>()
+                .ForMember(dst => dst.Roles, 
+                    dst => dst.MapFrom(src => src.Roles));
         }
     }
 }
