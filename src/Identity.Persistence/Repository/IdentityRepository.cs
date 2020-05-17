@@ -20,7 +20,9 @@ namespace Identity.Persistence.Repository
         
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .Include(r => r.Roles)
+                .ToListAsync();
         }
 
         public async Task<User> GetAsync(int id)
@@ -60,6 +62,23 @@ namespace Identity.Persistence.Repository
                 _context.Users.Update(contextUser);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task UpdateUserRolesAsync(User user, IEnumerable<Role> roles)
+        {
+            var contextUser = await _context.Users
+                .Include(r => roles)
+                .Where(u => u.Id == user.Id)
+                .FirstOrDefaultAsync();
+
+            if (contextUser is null)
+            {
+                throw new RepositoryException($"User id: {user.Id} not found.");
+            }
+
+            contextUser.SetRole(roles);
+            _context.Users.Update(contextUser);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(User user)
