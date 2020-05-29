@@ -7,7 +7,7 @@ using Identity.Persistence.Context;
 using Identity.Persistence.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.Persistence.Repository
+namespace Identity.Application.Repository
 {
     public class IdentityRepository : IIdentityRepository
     {
@@ -20,9 +20,7 @@ namespace Identity.Persistence.Repository
         
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return await _context.Users
-                .Include(r => r.Roles)
-                .ToListAsync();
+            return await _context.Users.ToListAsync();
         }
 
         public async Task<User> GetAsync(int id)
@@ -48,16 +46,12 @@ namespace Identity.Persistence.Repository
 
         public async Task EditAsync(User user)
         {
-            var contextUser = await _context.Users
-                .Include(r=>r.Roles)
-                .Where(usr => usr.Id == user.Id)
-                .FirstOrDefaultAsync();
-            
+            var contextUser = await _context.Users.Where(usr => usr.Id == user.Id).FirstOrDefaultAsync();
             if (contextUser != null)
             {
                 contextUser.SetEmail(user.Email);
                 contextUser.SetPassword(user.Password, user.Salt);
-                contextUser.SetRole(user.Roles);
+                contextUser.SetRole(user.UserRole);
 
                 _context.Users.Update(contextUser);
                 await _context.SaveChangesAsync();
@@ -66,19 +60,7 @@ namespace Identity.Persistence.Repository
 
         public async Task UpdateUserRolesAsync(User user, IEnumerable<Role> roles)
         {
-            var contextUser = await _context.Users
-                .Include(r => roles)
-                .Where(u => u.Id == user.Id)
-                .FirstOrDefaultAsync();
-
-            if (contextUser is null)
-            {
-                throw new RepositoryException($"User id: {user.Id} not found.");
-            }
-
-            contextUser.SetRole(roles);
-            _context.Users.Update(contextUser);
-            await _context.SaveChangesAsync();
+            throw new System.NotImplementedException();
         }
 
         public async Task DeleteAsync(User user)
@@ -87,7 +69,7 @@ namespace Identity.Persistence.Repository
 
             if (userToDelete == null)
             {
-                throw new RepositoryException("User not exist.");
+                throw new RepositoryException("User is null");
             }
             
             _context.Users.Remove(userToDelete);
@@ -96,12 +78,8 @@ namespace Identity.Persistence.Repository
 
         public async Task<IEnumerable<Role>> GetUserRoleAsync(int tokenCommandUserId)
         {
-            var result = await _context.Users
-                .Include(r => r.Roles)
-                .Where(usr => usr.Id == tokenCommandUserId)
-                .FirstOrDefaultAsync();
-            
-            return result.Roles?.ToArray();
+            var result = await _context.Users.Where(usr => usr.Id == tokenCommandUserId).FirstOrDefaultAsync();
+            return result.UserRole?.Select(r => r.Role).ToArray();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Identity.Application.Config;
+using Identity.Application.Repository;
 using Identity.Application.Services;
 using Identity.Application.Services.Interfaces;
 using Identity.Controllers.Filters;
@@ -32,7 +33,6 @@ namespace Identity.Extensions
         {
             services.AddScoped<IIdentityRepository, IdentityRepository>();
             services.AddScoped<ITokenRepository, TokenRepository>();
-            services.AddScoped<IRoleRepository, RoleRepository>();
             
             return services;
         }
@@ -43,6 +43,7 @@ namespace Identity.Extensions
             
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
 
             return services;
         }

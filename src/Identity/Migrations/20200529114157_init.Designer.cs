@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Identity.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20200418173824_init")]
+    [Migration("20200529114157_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,15 +31,10 @@ namespace Identity.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Value")
                         .HasColumnType("int");
 
                     b.HasKey("IdRole");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Role");
                 });
@@ -103,11 +98,19 @@ namespace Identity.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Identity.Core.Models.Role", b =>
+            modelBuilder.Entity("Identity.Core.Models.UserRole", b =>
                 {
-                    b.HasOne("Identity.Core.Models.User", null)
-                        .WithMany("Roles")
-                        .HasForeignKey("UserId");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Identity.Core.Models.Token", b =>
@@ -115,6 +118,21 @@ namespace Identity.Migrations
                     b.HasOne("Identity.Core.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Identity.Core.Models.UserRole", b =>
+                {
+                    b.HasOne("Identity.Core.Models.Role", "Role")
+                        .WithMany("UserRole")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Identity.Core.Models.User", "User")
+                        .WithMany("UserRole")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

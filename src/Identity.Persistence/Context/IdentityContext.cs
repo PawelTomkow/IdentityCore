@@ -13,6 +13,7 @@ namespace Identity.Persistence.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Token> Tokens { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
 
         public IdentityContext(DbContextOptions options, DatabaseConfig config) : base(options)
         {
@@ -29,6 +30,8 @@ namespace Identity.Persistence.Context
             modelBuilder
                 .ApplyConfiguration(new UserConfiguration())
                 .ApplyConfiguration(new RoleConfiguration())
+                .ApplyConfiguration(new TokenConfiguration())
+                .ApplyConfiguration(new UserRoleConfiguration())
                 .ApplyConfiguration(new TokenConfiguration());
 
             modelBuilder.Seed(_config);

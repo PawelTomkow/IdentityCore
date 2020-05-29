@@ -13,12 +13,12 @@ namespace Identity.Application.Services
     public class ManagementService : IManagementService
     {
         private readonly IIdentityRepository _repository;
-        private readonly IMapper _mapper;
+        // private readonly IMapper _mapper;
 
-        public ManagementService(IIdentityRepository repository, IMapper mapper)
+        public ManagementService(IIdentityRepository repository)
         {
             _repository = repository;
-            _mapper = mapper;
+            // _mapper = mapper;
         }
         
         public async Task ChangeUserRoleAsync(ChangeUserRoleCommand command)
@@ -28,10 +28,9 @@ namespace Identity.Application.Services
             {
                 throw new ManagementException($"User id: {command.UserId} not found."); 
             }
+            throw new System.NotImplementedException();
 
-            var roles = _mapper.Map<IEnumerable<Role>>(command.Roles);
-            
-            await _repository.UpdateUserRolesAsync(user, roles);
+            // var roles = _mapper.Map<IEnumerable<Role>>(command.Roles);
         }
 
         public async Task ChangePasswordAsync(ChangePasswordCommand command)
@@ -42,7 +41,8 @@ namespace Identity.Application.Services
         public async Task<IEnumerable<UserDto>> GetAllUsers()
         {
             var users = await _repository.GetAllAsync();
-            return _mapper.Map<IEnumerable<UserDto>>(users);
+            throw new System.NotImplementedException();
+            // return _mapper.Map<IEnumerable<UserDto>>(users);
         }
     }
 }
