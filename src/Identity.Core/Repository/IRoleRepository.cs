@@ -6,11 +6,12 @@ namespace Identity.Core.Repository
 {
     public interface IRoleRepository
     {
-        public Task<List<Role>> GetAllAsync();
+        public Task<IEnumerable<Role>> GetAllAsync();
         public Task<Role> GetAsync(int id);
         public Task<Role> GetAsync(string name);
         public Task AddAsync(Role role);
         public Task UpdateAsync(Role role);
         public Task DeleteAsync(Role role);
+        public Task<Role> GetDefaultAsync();
     }
 }

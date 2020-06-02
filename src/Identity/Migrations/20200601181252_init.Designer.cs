@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Identity.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20200418173824_init")]
+    [Migration("20200601181252_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,7 +23,7 @@ namespace Identity.Migrations
 
             modelBuilder.Entity("Identity.Core.Models.Role", b =>
                 {
-                    b.Property<int>("IdRole")
+                    b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -31,17 +31,26 @@ namespace Identity.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Value")
                         .HasColumnType("int");
 
-                    b.HasKey("IdRole");
+                    b.HasKey("RoleId");
 
-                    b.HasIndex("UserId");
+                    b.ToTable("Roles");
 
-                    b.ToTable("Role");
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            Name = "superuser",
+                            Value = 100
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            Name = "user",
+                            Value = 1
+                        });
                 });
 
             modelBuilder.Entity("Identity.Core.Models.Token", b =>
@@ -75,7 +84,7 @@ namespace Identity.Migrations
 
             modelBuilder.Entity("Identity.Core.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -98,16 +107,24 @@ namespace Identity.Migrations
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Identity.Core.Models.Role", b =>
+            modelBuilder.Entity("Identity.Core.Models.UserRole", b =>
                 {
-                    b.HasOne("Identity.Core.Models.User", null)
-                        .WithMany("Roles")
-                        .HasForeignKey("UserId");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Identity.Core.Models.Token", b =>
@@ -115,6 +132,21 @@ namespace Identity.Migrations
                     b.HasOne("Identity.Core.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Identity.Core.Models.UserRole", b =>
+                {
+                    b.HasOne("Identity.Core.Models.Role", "Role")
+                        .WithMany("UserRole")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Identity.Core.Models.User", "User")
+                        .WithMany("UserRole")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -12,22 +12,24 @@ namespace Identity.Persistence.Repository
     public class IdentityRepository : IIdentityRepository
     {
         private readonly IdentityContext _context;
+        private readonly IUserRoleRepository _userRoleRepository;
 
-        public IdentityRepository(IdentityContext context)
+        public IdentityRepository(IdentityContext context, IUserRoleRepository userRoleRepository)
         {
             _context = context;
+            _userRoleRepository = userRoleRepository;
         }
         
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _context.Users
-                .Include(r => r.Roles)
-                .ToListAsync();
+                .Include(u => u.UserRole)
+                .ThenInclude(r=> r.Role).ToListAsync();
         }
 
         public async Task<User> GetAsync(int id)
         {
-            return await _context.Users.Where(user => user.Id == id).FirstOrDefaultAsync();
+            return await _context.Users.Where(user => user.UserId == id).FirstOrDefaultAsync();
         }
 
         public async Task<User> GetAsync(string userName)
@@ -42,22 +44,22 @@ namespace Identity.Persistence.Repository
 
         public async Task AddAsync(User user)
         {
-            _context.Users.Add(user);
+            var newUser = user; 
+            
+            await _context.Users.AddAsync(newUser);
             await _context.SaveChangesAsync();
+
+            await _userRoleRepository.SetDefaultRoleAsync(newUser.UserId);
         }
 
         public async Task EditAsync(User user)
         {
-            var contextUser = await _context.Users
-                .Include(r=>r.Roles)
-                .Where(usr => usr.Id == user.Id)
-                .FirstOrDefaultAsync();
-            
+            var contextUser = await _context.Users.Where(usr => usr.UserId == user.UserId).FirstOrDefaultAsync();
             if (contextUser != null)
             {
                 contextUser.SetEmail(user.Email);
                 contextUser.SetPassword(user.Password, user.Salt);
-                contextUser.SetRole(user.Roles);
+                contextUser.SetRole(user.UserRole);
 
                 _context.Users.Update(contextUser);
                 await _context.SaveChangesAsync();
@@ -66,28 +68,16 @@ namespace Identity.Persistence.Repository
 
         public async Task UpdateUserRolesAsync(User user, IEnumerable<Role> roles)
         {
-            var contextUser = await _context.Users
-                .Include(r => roles)
-                .Where(u => u.Id == user.Id)
-                .FirstOrDefaultAsync();
-
-            if (contextUser is null)
-            {
-                throw new RepositoryException($"User id: {user.Id} not found.");
-            }
-
-            contextUser.SetRole(roles);
-            _context.Users.Update(contextUser);
-            await _context.SaveChangesAsync();
+            throw new System.NotImplementedException();
         }
 
         public async Task DeleteAsync(User user)
         {
-            var userToDelete = await _context.Users.Where(usr => usr.Id == user.Id).FirstOrDefaultAsync();
+            var userToDelete = await _context.Users.Where(usr => usr.UserId == user.UserId).FirstOrDefaultAsync();
 
             if (userToDelete == null)
             {
-                throw new RepositoryException("User not exist.");
+                throw new RepositoryException("User is null");
             }
             
             _context.Users.Remove(userToDelete);
@@ -97,11 +87,11 @@ namespace Identity.Persistence.Repository
         public async Task<IEnumerable<Role>> GetUserRoleAsync(int tokenCommandUserId)
         {
             var result = await _context.Users
-                .Include(r => r.Roles)
-                .Where(usr => usr.Id == tokenCommandUserId)
+                .Include(r=> r.UserRole)
+                .ThenInclude(r => r.Role)
+                .Where(usr => usr.UserId == tokenCommandUserId)
                 .FirstOrDefaultAsync();
-            
-            return result.Roles?.ToArray();
+            return result.UserRole?.Select(r => r.Role);
         }
     }
 }

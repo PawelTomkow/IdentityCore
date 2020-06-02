@@ -23,13 +23,13 @@ namespace Identity.Core.Models
             CreatedAt = DateTime.UtcNow;
         }
 
-        public int Id { get; protected set; }
+        public int UserId { get; protected set; }
         
         public string Email { get; protected set; }
         public string Password { get; protected set; }
         public string Salt { get; protected set; }
         public string Username { get; protected set; }
-        public IEnumerable<Role> Roles { get; protected set; }
+        public ICollection<UserRole> UserRole { get; protected set; }
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
 
@@ -57,12 +57,12 @@ namespace Identity.Core.Models
             UpdatedAt = DateTime.UtcNow;
         }
 
-        public void SetRole(IEnumerable<Role> role)
+        public void SetRole(ICollection<UserRole> role)
         {
             if (role.Any())
                 throw new DomainException("Role can not be empty.");
-            if (Roles.Any(role.Contains)) return;
-            Roles = role;
+            if (UserRole.Any(role.Contains)) return;
+            UserRole = role;
             UpdatedAt = DateTime.UtcNow;
         }
 

@@ -13,25 +13,20 @@ namespace Identity.Application.Services
     public class ManagementService : IManagementService
     {
         private readonly IIdentityRepository _repository;
+
+        private readonly IUserRoleRepository _userRoleRepository;
         private readonly IMapper _mapper;
 
-        public ManagementService(IIdentityRepository repository, IMapper mapper)
+        public ManagementService(IIdentityRepository repository, IUserRoleRepository userRoleRepository, IMapper mapper)
         {
             _repository = repository;
+            _userRoleRepository = userRoleRepository;
             _mapper = mapper;
         }
         
         public async Task ChangeUserRoleAsync(ChangeUserRoleCommand command)
         {
-            var user = await _repository.GetAsync(command.UserId);
-            if (user is null)
-            {
-                throw new ManagementException($"User id: {command.UserId} not found."); 
-            }
-
-            var roles = _mapper.Map<IEnumerable<Role>>(command.Roles);
-            
-            await _repository.UpdateUserRolesAsync(user, roles);
+            await _userRoleRepository.AddRangeAsync(command.RoleIds, command.UserId);
         }
 
         public async Task ChangePasswordAsync(ChangePasswordCommand command)

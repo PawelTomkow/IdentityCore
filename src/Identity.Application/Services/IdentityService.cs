@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Identity.Application.Commands;
 using Identity.Application.Commands.Auth.Login;
@@ -38,7 +39,7 @@ namespace Identity.Application.Services
             await _tokenService.GenerateTokenAsync(new GetTokenCommand
             {
                 IdRequest = loginCommand.IdRequest,
-                UserId = user.Id
+                UserId = user.UserId
             });
         }
 

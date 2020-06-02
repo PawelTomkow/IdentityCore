@@ -5,6 +5,6 @@ namespace Identity.Application.Commands.Role
     public class GetByIdRoleCommand : ICommand
     {
         [Required]
-        public int Id { get; set; }
+        public int RoleId { get; set; }
     }
 }

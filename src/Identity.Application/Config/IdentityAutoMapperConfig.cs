@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using Identity.Application.DTOs;
 using Identity.Core.Models;
 
@@ -15,11 +16,10 @@ namespace Identity.Application.Config
             CreateMap<RoleDto, Role>();
 
             CreateMap<User, UserDto>()
-                .ForMember(dst => dst.Roles, 
-                    dst => dst.MapFrom(src => src.Roles));
+                .ForMember(src => src.UserRoles, 
+                    dst => dst.MapFrom(opt => opt.UserRole.Select(x => x.Role)));
             CreateMap<UserDto, User>()
-                .ForMember(dst => dst.Roles, 
-                    dst => dst.MapFrom(src => src.Roles));
+                .ForMember(src => src.UserRole, opt => opt.Ignore());
         }
     }
 }
