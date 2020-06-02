@@ -8,7 +8,7 @@ namespace Identity.Persistence.TableConfiguration
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
-            builder.HasKey(key => key.IdRole);
+            builder.HasKey(key => key.RoleId);
         }
     }
 }

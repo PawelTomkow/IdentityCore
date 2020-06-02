@@ -7,25 +7,29 @@ using Identity.Persistence.Context;
 using Identity.Persistence.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.Application.Repository
+namespace Identity.Persistence.Repository
 {
     public class IdentityRepository : IIdentityRepository
     {
         private readonly IdentityContext _context;
+        private readonly IUserRoleRepository _userRoleRepository;
 
-        public IdentityRepository(IdentityContext context)
+        public IdentityRepository(IdentityContext context, IUserRoleRepository userRoleRepository)
         {
             _context = context;
+            _userRoleRepository = userRoleRepository;
         }
         
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .Include(u => u.UserRole)
+                .ThenInclude(r=> r.Role).ToListAsync();
         }
 
         public async Task<User> GetAsync(int id)
         {
-            return await _context.Users.Where(user => user.Id == id).FirstOrDefaultAsync();
+            return await _context.Users.Where(user => user.UserId == id).FirstOrDefaultAsync();
         }
 
         public async Task<User> GetAsync(string userName)
@@ -40,13 +44,17 @@ namespace Identity.Application.Repository
 
         public async Task AddAsync(User user)
         {
-            _context.Users.Add(user);
+            var newUser = user; 
+            
+            await _context.Users.AddAsync(newUser);
             await _context.SaveChangesAsync();
+
+            await _userRoleRepository.SetDefaultRoleAsync(newUser.UserId);
         }
 
         public async Task EditAsync(User user)
         {
-            var contextUser = await _context.Users.Where(usr => usr.Id == user.Id).FirstOrDefaultAsync();
+            var contextUser = await _context.Users.Where(usr => usr.UserId == user.UserId).FirstOrDefaultAsync();
             if (contextUser != null)
             {
                 contextUser.SetEmail(user.Email);
@@ -65,7 +73,7 @@ namespace Identity.Application.Repository
 
         public async Task DeleteAsync(User user)
         {
-            var userToDelete = await _context.Users.Where(usr => usr.Id == user.Id).FirstOrDefaultAsync();
+            var userToDelete = await _context.Users.Where(usr => usr.UserId == user.UserId).FirstOrDefaultAsync();
 
             if (userToDelete == null)
             {
@@ -78,8 +86,12 @@ namespace Identity.Application.Repository
 
         public async Task<IEnumerable<Role>> GetUserRoleAsync(int tokenCommandUserId)
         {
-            var result = await _context.Users.Where(usr => usr.Id == tokenCommandUserId).FirstOrDefaultAsync();
-            return result.UserRole?.Select(r => r.Role).ToArray();
+            var result = await _context.Users
+                .Include(r=> r.UserRole)
+                .ThenInclude(r => r.Role)
+                .Where(usr => usr.UserId == tokenCommandUserId)
+                .FirstOrDefaultAsync();
+            return result.UserRole?.Select(r => r.Role);
         }
     }
 }

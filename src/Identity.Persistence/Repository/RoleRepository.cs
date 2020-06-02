@@ -11,8 +11,9 @@ namespace Identity.Persistence.Repository
     public class RoleRepository : IRoleRepository
     {
         private readonly IdentityContext _context;
+        private const string DefaultNameUser = "user"; 
 
-        public RoleRepository(IdentityContext context)
+            public RoleRepository(IdentityContext context)
         {
             _context = context;
         }
@@ -24,7 +25,7 @@ namespace Identity.Persistence.Repository
 
         public async Task<Role> GetAsync(int id)
         {
-            return await _context.Roles.FirstOrDefaultAsync(r => r.IdRole == id);
+            return await _context.Roles.FirstOrDefaultAsync(r => r.RoleId == id);
         }
 
         public async Task<Role> GetAsync(string name)
@@ -46,10 +47,10 @@ namespace Identity.Persistence.Repository
 
         public async Task UpdateAsync(Role role)
         {
-            var ctxRole = await _context.Roles.FirstOrDefaultAsync(r => r.IdRole == role.IdRole);
+            var ctxRole = await _context.Roles.FirstOrDefaultAsync(r => r.RoleId == role.RoleId);
             if (ctxRole is null)
             {
-                throw new RepositoryException($"Role with {role.IdRole} not exist.");
+                throw new RepositoryException($"Role with {role.RoleId} not exist.");
             }
 
             ctxRole.Name = role.Name;
@@ -60,14 +61,19 @@ namespace Identity.Persistence.Repository
 
         public async Task DeleteAsync(Role role)
         {
-            var ctxRole = await _context.Roles.FirstOrDefaultAsync(r => r.IdRole == role.IdRole);
+            var ctxRole = await _context.Roles.FirstOrDefaultAsync(r => r.RoleId == role.RoleId);
             if (ctxRole is null)
             {
-                throw new RepositoryException($"Role with {role.IdRole} not exist.");
+                throw new RepositoryException($"Role with {role.RoleId} not exist.");
             }
 
             _context.Roles.Remove(ctxRole);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Role> GetDefaultAsync()
+        {
+            return await _context.Roles.FirstOrDefaultAsync(r => r.Name == DefaultNameUser);
         }
     }
 }

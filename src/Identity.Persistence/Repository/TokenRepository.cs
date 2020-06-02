@@ -36,7 +36,7 @@ namespace Identity.Persistence.Repository
                 throw new RepositoryException($"Not found refresh token: {refreshToken}");
             }
 
-            return token.User.Id;
+            return token.User.UserId;
         }
 
         public async Task AddAsync(Token token, int userId)

@@ -25,10 +25,10 @@ namespace Identity.Application.Services
 
         public async Task<Role> Get(GetByIdRoleCommand command)
         {
-            var role = await _repository.GetAsync(command.Id);
+            var role = await _repository.GetAsync(command.RoleId);
             if (role is null)
             {
-                throw new RoleException($"Role id: {command.Id} not exist.");
+                throw new RoleException($"Role id: {command.RoleId} not exist.");
             }
 
             return role;
@@ -57,7 +57,7 @@ namespace Identity.Application.Services
                 throw new RoleException($"Role id: {command.Id} not exist.");
             }
 
-            await _repository.UpdateAsync(new Role{IdRole = role.IdRole, Name = command.NewName});
+            await _repository.UpdateAsync(new Role{RoleId = role.RoleId, Name = command.NewName});
         }
 
         public async Task DeleteAsync(DeleteRoleCommand command)

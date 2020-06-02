@@ -17,13 +17,13 @@ namespace Identity.Persistence.Exceptions
             modelBuilder.Entity<Role>()
                 .HasData(new Role
                     {
-                        IdRole = 1,
+                        RoleId = 1,
                         Name = "superuser",
                         Value = 100
                     },
                     new Role
                     {
-                        IdRole = 2,
+                        RoleId = 2,
                         Name = "user",
                         Value = 1
                     });

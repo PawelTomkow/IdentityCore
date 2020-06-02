@@ -6,8 +6,10 @@ namespace Identity.Core.Repository
 {
     public interface IUserRoleRepository
     {
-        public Task AddAsync(Role role, User user);
+        public Task AddAsync(int roleId, int userId);
+        public Task AddRangeAsync(IEnumerable<int> roleIds, int userId);
         public IEnumerable<Role> GetRolesAsync(User user);
         public IEnumerable<User> GetUsersAsync(Role role);
+        public Task SetDefaultRoleAsync(int userId);
     }
 }

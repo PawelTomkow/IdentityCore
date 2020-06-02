@@ -12,5 +12,6 @@ namespace Identity.Core.Repository
         public Task AddAsync(Role role);
         public Task UpdateAsync(Role role);
         public Task DeleteAsync(Role role);
+        public Task<Role> GetDefaultAsync();
     }
 }

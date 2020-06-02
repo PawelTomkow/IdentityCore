@@ -103,7 +103,7 @@ namespace Identity
                 .UseHttpsRedirection()
                 .UseRouting()
                 .UseCustomIdentity()
-                .UseCustomExceptionHandler()
+                // .UseCustomExceptionHandler()
                 .UseCors("AllowAll")
                 .UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

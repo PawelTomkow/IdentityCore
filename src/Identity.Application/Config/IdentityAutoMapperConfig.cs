@@ -14,7 +14,12 @@ namespace Identity.Application.Config
 
             CreateMap<Role, RoleDto>();
             CreateMap<RoleDto, Role>();
-            
+
+            CreateMap<User, UserDto>()
+                .ForMember(src => src.UserRoles, 
+                    dst => dst.MapFrom(opt => opt.UserRole.Select(x => x.Role)));
+            CreateMap<UserDto, User>()
+                .ForMember(src => src.UserRole, opt => opt.Ignore());
         }
     }
 }

@@ -9,6 +9,6 @@ namespace Identity.Application.Commands.Management
         [Required]
         public int UserId { get; set; }
         [Required]
-        public IEnumerable<RoleDto> Roles { get; set; }
+        public IEnumerable<int> RoleIds { get; set; }
     }
 }

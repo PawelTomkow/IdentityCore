@@ -23,7 +23,7 @@ namespace Identity.Core.Models
             CreatedAt = DateTime.UtcNow;
         }
 
-        public int Id { get; protected set; }
+        public int UserId { get; protected set; }
         
         public string Email { get; protected set; }
         public string Password { get; protected set; }

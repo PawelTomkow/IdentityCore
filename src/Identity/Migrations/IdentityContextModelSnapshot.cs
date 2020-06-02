@@ -21,7 +21,7 @@ namespace Identity.Migrations
 
             modelBuilder.Entity("Identity.Core.Models.Role", b =>
                 {
-                    b.Property<int>("IdRole")
+                    b.Property<int>("RoleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -32,9 +32,23 @@ namespace Identity.Migrations
                     b.Property<int>("Value")
                         .HasColumnType("int");
 
-                    b.HasKey("IdRole");
+                    b.HasKey("RoleId");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            Name = "superuser",
+                            Value = 100
+                        },
+                        new
+                        {
+                            RoleId = 2,
+                            Name = "user",
+                            Value = 1
+                        });
                 });
 
             modelBuilder.Entity("Identity.Core.Models.Token", b =>
@@ -68,7 +82,7 @@ namespace Identity.Migrations
 
             modelBuilder.Entity("Identity.Core.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -91,7 +105,7 @@ namespace Identity.Migrations
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("Users");
                 });

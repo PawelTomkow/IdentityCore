@@ -39,7 +39,7 @@ namespace Identity.Application.Services
             await _tokenService.GenerateTokenAsync(new GetTokenCommand
             {
                 IdRequest = loginCommand.IdRequest,
-                UserId = user.Id
+                UserId = user.UserId
             });
         }
 
