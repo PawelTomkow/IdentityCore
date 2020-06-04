@@ -100,7 +100,7 @@ namespace Identity
             
             app
                 .UseMigrationIdentity()
-                .UseHttpsRedirection()
+                //.UseHttpsRedirection()
                 .UseRouting()
                 .UseCustomIdentity()
                 // .UseCustomExceptionHandler()
