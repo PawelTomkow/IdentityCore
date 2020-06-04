@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Identity.Core.Models;
+﻿using Identity.Core.Models;
 using Identity.Persistence.Exceptions;
 using Identity.Persistence.Settings;
 using Identity.Persistence.TableConfiguration;

@@ -91,7 +91,7 @@ namespace Identity
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.EnvironmentName.Equals("DockerDev"))
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
