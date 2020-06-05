@@ -2,15 +2,14 @@
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
-EXPOSE 81
-EXPOSE 5001
+EXPOSE 18766
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Identity/Identity.csproj", "Identity/"]
 COPY ["Identity.Core/Identity.Core.csproj", "Identity.Core/"]
 COPY ["Identity.Persistence/Identity.Persistence.csproj", "Identity.Persistence/"]
-COPY ["Identity.Infrastructure/Identity.Infrastructure.csproj", "Identity.Infrastructure/"]
+COPY ["Identity.Application/Identity.Application.csproj", "Identity.Application/"]
 RUN dotnet restore "Identity/Identity.csproj"
 COPY . .
 WORKDIR "/src/Identity"
