@@ -70,12 +70,12 @@ namespace Identity.Application.Services
             var token = new JwtSecurityTokenHandler().WriteToken(jwt);
             var refreshToken = await GenerateRefreshTokenAsync(tokenCommand.UserId);
             var objToken = ParsingTokenToDto(token, refreshToken);
-            var jsonToken = ParsingTokenToJson(objToken);
+            // var jsonToken = ParsingTokenToJson(objToken);
 
             var tokenDatabaseModel = _mapper.Map<Token>(objToken);
 
             await _tokenRepository.AddAsync(tokenDatabaseModel,tokenCommand.UserId);
-            _cache.Add(GenerateCacheObject(tokenCommand.IdRequest, jsonToken));
+            _cache.Add(GenerateCacheObject(tokenCommand.IdRequest, objToken));
         }
 
         public async Task RefreshTokenAsync(RefreshTokenCommand refreshTokenCommand)
@@ -90,9 +90,9 @@ namespace Identity.Application.Services
             await GenerateTokenAsync(tokenCommand);
         }
 
-        public string GetToken(string key)
+        public object GetToken(string key)
         {
-            return _cache.Get(key)?.Value as string;
+            return _cache.Get(key)?.Value as TokenDto;
         }
 
         private static TokenDto ParsingTokenToDto(string token, string refreshToken)
@@ -144,7 +144,7 @@ namespace Identity.Application.Services
                 .Replace("/", string.Empty);
         }
 
-        private CacheObject GenerateCacheObject(string key, string value)
+        private CacheObject GenerateCacheObject(string key, object value)
         {
             return new CacheObject
             {
