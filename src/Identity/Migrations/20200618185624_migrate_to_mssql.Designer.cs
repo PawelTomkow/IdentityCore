@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Identity.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20200610180541_pgsql")]
-    partial class pgsql
+    [Migration("20200618185624_migrate_to_mssql")]
+    partial class migrate_to_mssql
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

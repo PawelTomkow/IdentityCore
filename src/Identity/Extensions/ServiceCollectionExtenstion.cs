@@ -45,7 +45,8 @@ namespace Identity.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IManagementService, ManagementService>();
-            
+            services.AddScoped<IPasswordService, PasswordService>();
+
             return services;
         }
 

@@ -66,6 +66,18 @@ namespace Identity.Persistence.Repository
             }
         }
 
+        public async Task EditPasswordAsync(User user)
+        {
+            var contextUser = await _context.Users.Where(usr => usr.UserId == user.UserId).FirstOrDefaultAsync();
+            if (contextUser != null)
+            {
+                contextUser.SetPassword(user.Password, user.Salt);
+
+                _context.Users.Update(contextUser);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         public async Task UpdateUserRolesAsync(User user, IEnumerable<Role> roles)
         {
             throw new System.NotImplementedException();

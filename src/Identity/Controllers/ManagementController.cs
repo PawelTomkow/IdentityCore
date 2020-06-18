@@ -24,13 +24,5 @@ namespace Identity.Controllers
 
             return Ok(result);
         }
-        
-        [HttpPost]
-        public async Task<IActionResult> ChangeUserRole([FromBody] ChangeUserRoleCommand command)
-        {
-            await _service.ChangeUserRoleAsync(command);
-            return Ok();
-        }
-        
     }
 }
