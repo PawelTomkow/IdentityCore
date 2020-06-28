@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Identity.Migrations
 {
@@ -12,7 +13,7 @@ namespace Identity.Migrations
                 columns: table => new
                 {
                     RoleId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: true),
                     Value = table.Column<int>(nullable: false)
                 },
@@ -26,7 +27,7 @@ namespace Identity.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Email = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     Salt = table.Column<string>(nullable: true),
@@ -44,7 +45,7 @@ namespace Identity.Migrations
                 columns: table => new
                 {
                     TokenId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     IdSession = table.Column<string>(nullable: true),
                     AccessToken = table.Column<string>(nullable: true),
                     RefreshToken = table.Column<string>(nullable: true),
@@ -89,12 +90,11 @@ namespace Identity.Migrations
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "RoleId", "Name", "Value" },
-                values: new object[] { 1, "superuser", 100 });
-
-            migrationBuilder.InsertData(
-                table: "Roles",
-                columns: new[] { "RoleId", "Name", "Value" },
-                values: new object[] { 2, "user", 1 });
+                values: new object[,]
+                {
+                    { 1, "superuser", 100 },
+                    { 2, "user", 1 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tokens_UserId",
