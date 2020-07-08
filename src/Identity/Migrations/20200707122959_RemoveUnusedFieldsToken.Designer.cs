@@ -3,15 +3,17 @@ using System;
 using Identity.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Identity.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20200707122959_RemoveUnusedFieldsToken")]
+    partial class RemoveUnusedFieldsToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,11 +55,6 @@ namespace Identity.Migrations
 
             modelBuilder.Entity("Identity.Core.Models.Token", b =>
                 {
-                    b.Property<int>("TokenId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
                     b.Property<string>("IdSession")
                         .HasColumnType("text");
 
@@ -66,8 +63,6 @@ namespace Identity.Migrations
 
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
-
-                    b.HasKey("TokenId");
 
                     b.HasIndex("UserId");
 
