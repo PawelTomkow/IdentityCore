@@ -4,7 +4,7 @@ using Identity.Application.DTOs;
 
 namespace Identity.Application.Commands.Management
 {
-    public class ChangeUserRoleCommand
+    public class ChangeUserRoleCommand : ICommand
     {
         [Required]
         public int UserId { get; set; }

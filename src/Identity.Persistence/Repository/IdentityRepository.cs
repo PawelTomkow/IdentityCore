@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Identity.Core.Models;
 using Identity.Core.Repository;
 using Identity.Persistence.Context;
-using Identity.Persistence.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Persistence.Repository
@@ -66,23 +65,17 @@ namespace Identity.Persistence.Repository
             }
         }
 
-        public async Task UpdateUserRolesAsync(User user, IEnumerable<Role> roles)
+        public async Task EditPasswordAsync(User user)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task DeleteAsync(User user)
-        {
-            var userToDelete = await _context.Users.Where(usr => usr.UserId == user.UserId).FirstOrDefaultAsync();
-
-            if (userToDelete == null)
+            var contextUser = await _context.Users.Where(usr => usr.UserId == user.UserId).FirstOrDefaultAsync();
+            if (contextUser != null)
             {
-                throw new RepositoryException("User is null");
+                contextUser.SetPassword(user.Password, user.Salt);
+
+                _context.Users.Update(contextUser);
+                await _context.SaveChangesAsync();
             }
-            
-            _context.Users.Remove(userToDelete);
-            await _context.SaveChangesAsync();
-        }    
+        }
 
         public async Task<IEnumerable<Role>> GetUserRoleAsync(int tokenCommandUserId)
         {

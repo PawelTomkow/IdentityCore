@@ -29,11 +29,6 @@ namespace Identity.Application.Services
             await _userRoleRepository.AddRangeAsync(command.RoleIds, command.UserId);
         }
 
-        public async Task ChangePasswordAsync(ChangePasswordCommand command)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public async Task<IEnumerable<UserDto>> GetAllUsers()
         {
             var users = await _repository.GetAllAsync();
