@@ -9,7 +9,7 @@ namespace Identity.Persistence.TableConfiguration
         public void Configure(EntityTypeBuilder<Token> builder)
         {
             builder
-                .HasKey(key => key.TokenId);
+                .HasKey(k => k.TokenId);
         }
     }
 }

@@ -13,8 +13,6 @@ namespace Identity.Core.Repository
         public Task AddAsync(User user);
         public Task EditAsync(User user);
         public Task EditPasswordAsync(User user);
-        public Task UpdateUserRolesAsync(User user, IEnumerable<Role> roles);
-        public Task DeleteAsync(User user);
         Task<IEnumerable<Role>> GetUserRoleAsync(int tokenCommandUserId);
     }
 }

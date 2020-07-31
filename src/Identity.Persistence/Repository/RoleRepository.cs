@@ -41,7 +41,7 @@ namespace Identity.Persistence.Repository
                 throw new RepositoryException($"Role {role.Name} is exist.");
             }
 
-            await _context.Roles.AddAsync(role);
+            await _context.Roles.AddAsync(new Role{Name = role.Name, Value = 1});
             await _context.SaveChangesAsync();
         }
 

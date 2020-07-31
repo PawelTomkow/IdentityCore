@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Identity.Application.Commands.Management;
 using Identity.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +24,14 @@ namespace Identity.Controllers
             var result = await _service.GetAllUsers();
 
             return Ok(result);
+        }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeEmail(ChangeEmailCommand command)
+        {
+            throw new NotImplementedException();
         }
     }
 }

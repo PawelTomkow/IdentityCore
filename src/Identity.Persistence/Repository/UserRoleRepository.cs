@@ -58,6 +58,8 @@ namespace Identity.Persistence.Repository
                 throw new RepositoryException("Not found user");
             }
 
+            await RemoveUserRoles(ctxUser);
+
             foreach (var roleId in roleIds)
             {
                 var ctxRole =  await _context.Roles
@@ -67,7 +69,7 @@ namespace Identity.Persistence.Repository
                 {
                     throw new RepositoryException("Not found role");
                 }
-                
+
                 var userRole = new UserRole
                 {
                     Role = ctxRole,
@@ -78,6 +80,24 @@ namespace Identity.Persistence.Repository
             }
             
             await _context.SaveChangesAsync();
+        }
+
+        private async Task RemoveUserRoles(User user)
+        {
+            var userRoles = await GetRolesForUser(user);
+
+            if (userRoles is null)
+            {
+                return;
+            }
+            
+            _context.UserRoles.RemoveRange(userRoles);
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task<IEnumerable<UserRole>> GetRolesForUser(User user)
+        {
+            return await _context.UserRoles.Where(role => role.UserId == user.UserId).ToListAsync();
         }
 
         public IEnumerable<Role> GetRolesAsync(User user)

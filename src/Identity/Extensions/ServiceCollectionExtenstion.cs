@@ -46,6 +46,7 @@ namespace Identity.Extensions
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IManagementService, ManagementService>();
             services.AddScoped<IPasswordService, PasswordService>();
+            services.AddScoped<IMailSender,MailSender>();
 
             return services;
         }
