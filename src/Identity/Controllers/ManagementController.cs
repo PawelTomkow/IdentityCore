@@ -26,8 +26,6 @@ namespace Identity.Controllers
             return Ok(result);
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> ChangeEmail(ChangeEmailCommand command)
         {

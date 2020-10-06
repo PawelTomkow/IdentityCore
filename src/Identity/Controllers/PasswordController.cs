@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.Controllers
 {
+    [ApiController]
+    [Route("auth/[controller]/[action]")]
     public class PasswordController : BaseApiController
     {
         private readonly IPasswordService _passwordService;
